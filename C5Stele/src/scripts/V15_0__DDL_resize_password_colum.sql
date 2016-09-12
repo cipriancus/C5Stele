@@ -1,0 +1,1 @@
+Alter table users modify Column password varchar(255) NOT NULL;

@@ -1,0 +1,34 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+	<ui:composition template="template.xhtml">
+
+		<ui:define name="header">
+			<ui:param name="pageParam" value="faq" />
+			<ui:include src="header.xhtml" />
+		</ui:define>
+
+		<ui:define name="content">
+			<h:outputStylesheet name="css/faq.css" />
+
+			<h:form id="form" styleClass="outer row">
+				<p:growl id="msgs" showDetail="true" />
+				<p:outputPanel layout="block" styleClass="col-lg-8 col-lg-offset-2">
+					<ui:repeat var="listFaq" value="#{faqBean.data}" varStatus="status">
+						<p:accordionPanel activeIndex="null">
+
+							<p:tab title="#{listFaq.question}" styleClass="tab">
+								<h:outputText value="#{listFaq.answer}" />
+							</p:tab>
+
+						</p:accordionPanel>
+					</ui:repeat>
+				</p:outputPanel>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

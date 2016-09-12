@@ -1,0 +1,58 @@
+@CHARSET "ISO-8859-1";
+
+.outer {
+	display: table;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    margin-top: 30px;
+    margin-bottom: 70px;
+}
+
+.ui-accordion .ui-accordion-header {
+	padding-left: .5em;
+}
+
+.ui-accordion .ui-accordion-header .ui-icon {
+	left: auto;
+	right: .5em;
+}
+
+.ui-fieldset .ui-state-default, .ui-fieldset.ui-widget-content .ui-state-default, .ui-fieldset.ui-widget-header .ui-state-default {
+	font-weight: normal;
+	box-shadow: none;
+	border:none;
+	border-radius:0;
+	background: none;
+	padding-left:15px;
+}
+
+.basic {
+	margin: auto;
+	width: 50%;
+}
+
+.ui-accordion {
+	margin-bottom: 20px;
+}
+
+.ui-fieldset.ui-widget-content {
+	background: none;
+}
+
+.ui-fieldset.ui-state-default {
+	box-shadow: none;
+	webkit-box-shadow: none;
+}
+
+.ui-fieldset-legend.ui-corner-all.ui-state-default {
+	margin-bottom: 5px;
+}
+
+.tab {
+	margin-bottom: 30px;
+}
+
+.tab legend {
+	width: auto;
+}

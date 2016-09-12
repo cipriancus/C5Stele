@@ -1,0 +1,8 @@
+Buna $user,
+
+  Ati fost inregistrat cu succes cu username-ul $username! Urmatorul pas este de a va seta parola, pentru asta activa va rugam sa intrati pe link-ul urmator:
+  
+  http://10.227.96.28:8080/C5Stele/reset?resetcode=$uid
+  
+  Multumim,
+  C5Stele

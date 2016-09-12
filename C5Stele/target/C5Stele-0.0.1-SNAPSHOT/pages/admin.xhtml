@@ -1,0 +1,1152 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+<h:body>
+	<ui:composition template="template.xhtml">
+
+		<ui:define name="header">
+			<ui:param name="pageParam" value="home" />
+			<ui:include src="header.xhtml" />
+		</ui:define>
+
+		<ui:define name="content" styleClass="content">
+
+			<h:outputStylesheet name="css/bootstrap.min.css" />
+			<h:outputStylesheet name="css/admin.css" />
+			<script type="text/javascript">
+				function handleDrop(event, ui) {
+					var dropped = ui.draggable;
+
+					dropped.fadeOut('fast');
+				}
+			</script>
+
+			<div class="row mainWrapper">
+
+				<div class="col-md-1 col-sm-1 leftPanel">
+					<h:form id="pagesForm" onsubmit="return false;"
+						styleClass="pagesFormClass">
+						<p:menu styleClass="pagesFormMenu">
+
+							<p:submenu label="#{msg['admin.editPages']}">
+								<p:menuitem value="#{msg['admin.menuAboutUs']}"
+									icon="ui-icon-mail-closed"
+									action="#{adminPageViewBean.makeAboutVisible}"
+									update="rightPanelInnerID" ajax="true" />
+								<p:menuitem value="#{msg['admin.menuContact']}"
+									icon="ui-icon-contact"
+									action="#{adminPageViewBean.makeContactVisible}"
+									update="rightPanelInnerID" ajax="true" />
+								<p:menuitem value="#{msg['admin.menuFAQ']}"
+									icon="ui-icon-search"
+									action="#{adminPageViewBean.makeFaqVisible}"
+									update="rightPanelInnerID" ajax="true" />
+								<p:menuitem value="#{msg['admin.menuNews']}"
+									icon="ui-icon-clock"
+									action="#{adminPageViewBean.makeNewsVisible}"
+									update="rightPanelInnerID" ajax="true" />
+							</p:submenu>
+
+
+							<p:submenu label="#{msg['admin.administration']}">
+								<p:menuitem value="#{msg['admin.menuTeams']}" ajax="true"
+									icon=" ui-icon-plus"
+									action="#{adminPageViewBean.makeTeamsVisible}"
+									update="rightPanelInnerID" />
+
+								<p:menuitem value="#{msg['admin.menuProjects']}" ajax="true"
+									icon=" ui-icon-plus"
+									action="#{adminPageViewBean.makeProjectsVisible}"
+									update="rightPanelInnerID" />
+
+								<p:menuitem value="#{msg['admin.menuUsers']}" ajax="true"
+									icon=" ui-icon-scissors"
+									action="#{adminPageViewBean.makeUsersVisible}"
+									update="rightPanelInnerID" />
+								<p:menuitem value="#{msg['admin.menuPeriods']}" ajax="true"
+									icon=" ui-icon-calendar"
+									action="#{adminPageViewBean.makePeriodsVisible}"
+									update="rightPanelInnerID" />
+							</p:submenu>
+						</p:menu>
+					</h:form>
+
+				</div>
+
+				<div class="col-md-11 col-sm-11 rightPanel">
+					<div class="col-md-12 rightPanelInner">
+						<h:panelGrid id="rightPanelInnerID" styleClass="col-lg-12 col-md-12 col-sm-10 col-xs-6">
+
+							<h:form id="aboutUs" rendered="#{adminPageViewBean.aboutUs}"
+								onsubmit="return false;">
+								<!-- About us edit and add section -->
+
+								<h:panelGroup id="aboutEdit" layout="block" class="aboutEdit">
+									<p:messages id="messages" globalOnly="true" showDetail="true"
+										autoUpdate="true" closable="true" />
+									<h3>
+										<h:outputLabel styleClass="subMenuTitle">#{msg['admin.aboutInsert']}:</h:outputLabel>
+									</h3>
+
+									<h:panelGrid columns="2" style="margin-top: 10px">
+										<p:commandButton value="#{msg['admin.aboutClick']}"
+											oncomplete="PF('dlg').show()" icon="ui-icon-disk" />
+
+										<p:dialog id="dialogAbout" closable="false"
+											header="Insert new About Us tab" modal="true" widgetVar="dlg"
+											showEffect="fade" hideEffect="fade">
+											
+												<p:inputText id="titleEdit"
+													value="#{aboutUsAdminBean.title}"
+													placeholder="#{msg['admin.aboutTitle']}" />
+												<p:editor id="editor" widgetVar="editorWidget" width="600"
+													value="#{aboutUsAdminBean.text}" />
+
+												<p:commandButton value="#{msg['admin.submit']}"
+													icon="ui-icon-disk" update="rightPanelInnerID" ajax="true"
+													action="#{aboutUsAdminBean.postNewAboutUs}"
+													oncomplete="PF('dlg').hide();" />
+
+												<p:commandButton value="#{msg['admin.exit']}" type="button"
+													onclick="PF('dlg').hide();" icon="ui-icon-close" />
+											
+										</p:dialog>
+									</h:panelGrid>
+								</h:panelGroup>
+
+								<ui:repeat var="item" value="#{aboutBean.data}"
+									varStatus="status">
+									<div class="row aboutTabs">
+										<div class="col-md-10">
+											<p:accordionPanel activeIndex="null">
+												<p:tab title="#{item.name}">
+													<h:panelGrid columns="2" cellpadding="10">
+														<h:outputText value="#{item.text}" />
+													</h:panelGrid>
+												</p:tab>
+											</p:accordionPanel>
+										</div>
+
+										<div class="col-md-2">
+											<p:commandButton value="#{msg['admin.aboutClickEdit']}"
+												oncomplete="PF('dlg#{status.index}').show()"
+												icon="ui-icon-disk" />
+										</div>
+
+										<p:dialog id="dialog" closable="false"
+											header="#{msg['admin.aboutEditTab']} #{status.index}"
+											modal="true" widgetVar="dlg#{status.index}" showEffect="fade"
+											hideEffect="fade">
+											<p:inputText value="#{item.name}" binding="#{inputNameTitle}"
+												immediate="true" />
+											<p:editor id="editor" widgetVar="editorWidget#{status.index}"
+												binding="#{inputNameText}" width="600" value="#{item.text}"
+												immediate="true" />
+
+											<p:commandButton value="#{msg['admin.delete']}"
+												icon="ui-icon-disk" update="rightPanelInnerID"
+												immediate="true"
+												action="#{aboutUsAdminBean.deleteAboutUs(item.id)}"
+												onclick="PF('dlg#{status.index}').hide();" />
+
+											<p:commandButton value="#{msg['admin.submit']}"
+												icon="ui-icon-disk" update="rightPanelInnerID"
+												immediate="true"
+												action="#{aboutUsAdminBean.updateAboutUs(item.id,inputNameTitle.value,inputNameText.value)}"
+												oncomplete="PF('dlg').hide();" />
+
+											<p:commandButton value="#{msg['admin.exit']}" type="button"
+												onclick="PF('dlg#{status.index}').hide();"
+												icon="ui-icon-close" />
+										</p:dialog>
+									</div>
+								</ui:repeat>
+							</h:form>
+
+							<h:form id="contact" rendered="#{adminPageViewBean.contact}"
+								onsubmit="return false;">
+
+								<h:panelGroup id="contactEdit" layout="block" class="aboutEdit">
+									<h3>
+										<h:outputLabel styleClass="subMenuTitle">#{msg['admin.contactInsert']}:</h:outputLabel>
+									</h3>
+
+
+									<h:panelGrid columns="2" style="margin-top: 10px">
+										<p:commandButton value="#{msg['admin.aboutClick']}"
+											oncomplete="PF('dlg').show()" icon="ui-icon-disk" />
+
+										<p:dialog closable="false" id="dialog"
+											header="#{msg['admin.contactNewInfo']}" modal="true"
+											widgetVar="dlg" showEffect="fade" hideEffect="fade">
+
+											<p:inputText styleClass="col-md-12 inputText"
+												binding="#{locationOfOffice}"
+												placeholder="#{msg['admin.contactLocation']}" />
+											<p:inputText styleClass="col-md-12 inputText"
+												binding="#{addressOfOffice}"
+												placeholder="#{msg['admin.contactAddress']}" />
+											<p:inputText styleClass="col-md-12 inputText"
+												binding="#{telephoneOfOffice}"
+												placeholder="#{msg['admin.contactTelephone']}" />
+											<p:inputText styleClass="col-md-12 inputText"
+												binding="#{faxOfOffice}"
+												placeholder="#{msg['admin.contactFax']}" />
+
+											<p:commandButton value="#{msg['admin.submit']}"
+												icon="ui-icon-disk"
+												action="#{contactAdminBean.postNewContact(locationOfOffice.value,addressOfOffice.value,telephoneOfOffice.value,faxOfOffice.value)}"
+												update="rightPanelInnerID" ajax="true" />
+											<p:commandButton value="#{msg['admin.exit']}" type="button"
+												onclick="PF('dlg').hide();" icon="ui-icon-close" />
+										</p:dialog>
+									</h:panelGrid>
+								</h:panelGroup>
+
+								<ui:repeat var="itemContact" value="#{contactBean.data}"
+									varStatus="status">
+
+									<div class="row aboutTabs">
+										<div class="col-md-10">
+											<dl>
+												<dt>
+													<h:outputText value="#{itemContact.site}" escape="false" />
+												</dt>
+
+												<dd>
+													<h:outputText styleClass="infos"
+														value="#{itemContact.address}" escape="false" />
+												</dd>
+
+												<dd>
+													<h:outputText styleClass="infos"
+														value="#{itemContact.phone}" escape="false" />
+												</dd>
+
+												<dd>
+													<h:outputText styleClass="infos" value="#{itemContact.fax}"
+														escape="false" />
+												</dd>
+											</dl>
+										</div>
+										<div class="col-md-2">
+											<p:commandButton value="#{msg['admin.aboutClickEdit']}"
+												oncomplete="PF('dlg#{status.index}').show()"
+												icon="ui-icon-disk" />
+										</div>
+										<p:dialog closable="false"
+											header="#{msg['admin.aboutEditTab']} #{status.index}"
+											modal="true" widgetVar="dlg#{status.index}" showEffect="fade"
+											hideEffect="fade">
+
+											<p:inputText styleClass="col-md-12 inputText"
+												binding="#{editLocationOfOffice}"
+												value="#{itemContact.site}" />
+											<p:inputText styleClass="col-md-12 inputText"
+												binding="#{editAddressOfOffice}"
+												value="#{itemContact.address}" />
+											<p:inputText styleClass="col-md-12 inputText"
+												binding="#{editPhoneOfOffice}" value="#{itemContact.phone}" />
+											<p:inputText styleClass="col-md-12 inputText"
+												binding="#{editFaxOfOffice}" value="#{itemContact.fax}" />
+
+											<p:commandButton value="Submit" icon="ui-icon-disk"
+												oncomplete="PF('dlg#{status.index}').hide();"
+												update="rightPanelInnerID" ajax="true"
+												action="#{contactAdminBean.editContact(itemContact.id,editLocationOfOffice.value,editAddressOfOffice.value,editPhoneOfOffice.value,editFaxOfOffice.value)}" />
+
+											<p:commandButton value="Delete" icon="ui-icon-disk"
+												update="rightPanelInnerID" immediate="true"
+												action="#{contactAdminBean.deleteContact(itemContact.id)}"
+												onclick="PF('dlg#{status.index}').hide();" />
+
+											<p:commandButton value="Exit" type="button"
+												onclick="PF('dlg#{status.index}').hide();"
+												icon="ui-icon-close" />
+										</p:dialog>
+									</div>
+								</ui:repeat>
+
+							</h:form>
+
+							<h:form id="faq" rendered="#{adminPageViewBean.faq}"
+								onsubmit="return false;">
+
+								<h:panelGroup id="faqEdit" layout="block" class="aboutEdit">
+									<h3>
+										<h:outputLabel styleClass="subMenuTitle">#{msg['admin.faqInsert']}:</h:outputLabel>
+									</h3>
+
+
+									<h:panelGrid columns="2" style="margin-top: 10px">
+										<p:commandButton value="#{msg['admin.faqClick']}"
+											oncomplete="PF('dlg').show()" icon="ui-icon-disk" />
+
+										<p:dialog closable="false"
+											header="#{msg['admin.faqInsertTab']}" modal="true"
+											widgetVar="dlg" showEffect="fade" hideEffect="fade">
+
+											<p:inputText placeholder="#{msg['admin.faqQuestion']}"
+												binding="#{inputQuestionFAQ}" />
+											<p:editor id="editor" widgetVar="editorWidget" width="600"
+												placeholder="#{msg['admin.faqAnswer']}"
+												binding="#{inputAnswerFAQ}" />
+
+											<p:commandButton value="#{msg['admin.submit']}"
+												icon="ui-icon-disk" ajax="true"
+												action="#{faqAdminBean.postNewFAQ(inputQuestionFAQ.value,inputAnswerFAQ.value)}"
+												update="rightPanelInnerID" oncomplete="PF('dlg').hide();" />
+
+											<p:commandButton value="#{msg['admin.exit']}" type="button"
+												onclick="PF('dlg').hide();" icon="ui-icon-close" />
+										</p:dialog>
+									</h:panelGrid>
+								</h:panelGroup>
+
+								<ui:repeat var="itemFAQ" value="#{faqBean.data}"
+									varStatus="status">
+
+									<div class="row aboutTabs">
+										<div class="col-md-10">
+											<p:accordionPanel activeIndex="null">
+												<p:tab title="#{itemFAQ.question}">
+													<h:panelGrid columns="2" cellpadding="10">
+														<h:outputText value="#{itemFAQ.answer}" />
+													</h:panelGrid>
+												</p:tab>
+											</p:accordionPanel>
+										</div>
+										<div class="col-md-2">
+											<p:commandButton value="#{msg['admin.aboutClickEdit']}"
+												oncomplete="PF('dlg#{status.index}').show()"
+												icon="ui-icon-disk" />
+										</div>
+										<p:dialog closable="false"
+											header="#{msg['admin.aboutEditTab']} #{status.index}"
+											modal="true" widgetVar="dlg#{status.index}" showEffect="fade"
+											hideEffect="fade">
+
+											<p:inputText value="#{itemFAQ.question}"
+												binding="#{editQuestion}" />
+											<p:editor id="editor" widgetVar="editorWidget#{status.index}"
+												width="600" value="#{itemFAQ.answer}"
+												binding="#{editAnswer}" />
+											<p:commandButton value="#{msg['admin.submit']}"
+												icon="ui-icon-disk" update="rightPanelInnerID" ajax="true"
+												action="#{faqAdminBean.updateFAQ(itemFAQ.id,editQuestion.value,editAnswer.value)}"
+												onclick="PF('dlg#{status.index}').hide();" />
+											<p:commandButton value="#{msg['admin.delete']}"
+												icon="ui-icon-disk" update="rightPanelInnerID"
+												immediate="true"
+												action="#{faqAdminBean.deleteFAQ(itemFAQ.id)}"
+												onclick="PF('dlg#{status.index}').hide();" />
+											<p:commandButton value="#{msg['admin.exit']}" type="button"
+												onclick="PF('dlg#{status.index}').hide();"
+												icon="ui-icon-close" />
+										</p:dialog>
+									</div>
+								</ui:repeat>
+							</h:form>
+
+							<h:form id="news" rendered="#{adminPageViewBean.news}"
+								onsubmit="return false;">
+
+								<h:panelGroup id="newsEdit" layout="block" class="aboutEdit">
+									<h3>
+										<h:outputLabel styleClass="subMenuTitle">#{msg['admin.newsInsert']}:</h:outputLabel>
+									</h3>
+
+
+									<h:panelGrid columns="2" style="margin-top: 10px">
+										<p:commandButton value="#{msg['admin.aboutClick']}"
+											oncomplete="PF('dlg').show()" icon="ui-icon-disk" />
+
+										<p:dialog closable="false"
+											header="#{msg['admin.newsInsertTab']}" modal="true"
+											widgetVar="dlg" showEffect="fade" hideEffect="fade">
+
+											<p:inputText placeholder="#{msg['admin.newsTitle']}"
+												binding="#{inputNewsTitle}" />
+											<p:editor id="editor" widgetVar="editorWidget" width="600"
+												binding="#{inputNewsEdit}" />
+											<p:commandButton value="#{msg['admin.submit']}"
+												icon="ui-icon-disk" ajax="true"
+												action="#{newsAdminBean.postNews(inputNewsTitle.value,inputNewsEdit.value)}"
+												update="rightPanelInnerID" onclick="PF('dlg').hide();" />
+											<p:commandButton value="#{msg['admin.exit']}" type="button"
+												onclick="PF('dlg').hide();" icon="ui-icon-close" />
+										</p:dialog>
+									</h:panelGrid>
+								</h:panelGroup>
+
+								<ui:repeat var="itemNews" value="#{newsBean.data}"
+									varStatus="status">
+
+									<div class="row aboutTabs">
+										<div class="col-md-10">
+											<p:accordionPanel activeIndex="null">
+												<p:tab title="#{itemNews.title}">
+													<h:panelGrid columns="2" cellpadding="10">
+														<h:outputText value="#{itemNews.message}" />
+													</h:panelGrid>
+												</p:tab>
+											</p:accordionPanel>
+										</div>
+										<div class="col-md-2">
+											<p:commandButton value="#{msg['admin.aboutClickEdit']}"
+												oncomplete="PF('dlg#{status.index}').show()"
+												icon="ui-icon-disk" />
+										</div>
+										<p:dialog closable="false" header=" #{status.index}"
+											modal="true" widgetVar="dlg#{status.index}" showEffect="fade"
+											hideEffect="fade">
+
+											<p:inputText value="#{itemNews.title}"
+												binding="#{editNewsTitle}" />
+											<p:editor id="editor" widgetVar="editorWidget#{status.index}"
+												binding="#{editNewsEdit}" width="600"
+												value="#{itemNews.message}" />
+											<p:commandButton value="#{msg['admin.submit']}"
+												icon="ui-icon-disk" ajax="true"
+												action="#{newsAdminBean.updateNews(itemNews.id,editNewsTitle.value,editNewsEdit.value)}"
+												update="rightPanelInnerID"
+												onclick="PF('dlg#{status.index}').hide();" />
+											<p:commandButton value="#{msg['admin.delete']}"
+												icon="ui-icon-disk" update="rightPanelInnerID"
+												immediate="true"
+												action="#{newsAdminBean.deleteNews(itemNews.id)}"
+												onclick="PF('dlg#{status.index}').hide();" />
+											<p:commandButton value="#{msg['admin.exit']}" type="button"
+												onclick="PF('dlg#{status.index}').hide();"
+												icon="ui-icon-close" />
+										</p:dialog>
+									</div>
+								</ui:repeat>
+							</h:form>
+
+							<h:form id="teams" rendered="#{adminPageViewBean.teams}">
+
+								<p:outputPanel styleClass="listOfTeams" layout="block">
+
+									<p:dataGrid var="team" value="#{teamService.getAll()}"
+										columns="3" layout="grid" rows="3" paginator="true"
+										id="availableTeams" lazy="true" paginatorPosition="bottom"
+										paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+										rowsPerPageTemplate="3,6,12"
+										styleClass="col-lg-12 col-md-12 col-sm-10 col-xs-12 entity-container-header">
+										<f:facet name="header">
+											<span><h:outputText value="#{msg['admin.teamsList']}" /></span>
+
+
+											<p:commandButton update="teams:newTeamDetail"
+												styleClass="button" oncomplete="PF('newTeamDialog').show()"
+												value="#{msg['admin.teamsCreateNew']}" />
+										</f:facet>
+
+
+
+										<p:panel id="pnlTeam" styleClass="entity-container">
+
+											<f:facet name="header">
+
+												<p:commandButton update="teams:teamDetail"
+													oncomplete="PF('teamDialog').show()" title="View Detail"
+													icon="ui-icon ui-icon-search" styleClass="footerbtn"
+													id="individualFooterTeam">
+													<f:setPropertyActionListener value="#{team}"
+														target="#{teamEditAdminBean.selectedTeam}" />
+
+
+												</p:commandButton>
+												<h:outputText value="#{team.name}"></h:outputText>
+
+											</f:facet>
+											<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+
+												<h:outputText styleClass="userLabels"
+													value="#{msg['admin.projectsName']}:" />
+												<h:outputText styleClass="userValues" value="#{team.name}" />
+
+												<h:outputText styleClass="userLabels"
+													value="#{msg['admin.projectsAgency']}:" />
+												<h:outputText styleClass="userValues"
+													value="#{team.project.agency.city}" />
+
+												<h:outputText styleClass="userLabels"
+													value="#{msg['admin.teamsProject']}:" />
+												<h:outputText styleClass="userValues"
+													value="#{team.project.name}" />
+
+											</p:panelGrid>
+
+
+										</p:panel>
+
+
+									</p:dataGrid>
+								</p:outputPanel>
+
+								<p:dialog header="Team Info" widgetVar="teamDialog" modal="true"
+									showEffect="fade" hideEffect="fade" resizable="false"
+									styleClass="modal-dialog-teams">
+									<p:outputPanel id="teamDetail" styleClass="modal-dialog-body">
+										<p:panelGrid
+											rendered="#{teamEditAdminBean.selectedTeam ne null}"
+											columns="1" styleClass="table">
+
+											<p:row>
+												<p:pickList id="PojoPickList"
+													value="#{teamEditAdminBean.allMembers}" var="member"
+													effect="none" itemValue="#{member}"
+													converter="#{entityConverter}"
+													itemLabel="#{member.lastName} #{member.firstName}"
+													showSourceControls="true" showTargetControls="true"
+													showCheckbox="true" responsive="true"
+													showSourceFilter="true" showTargetFilter="true"
+													filterMatchMode="contains">
+
+													<f:facet name="sourceCaption">#{msg['admin.allEmployees']}</f:facet>
+													<f:facet name="targetCaption">#{msg['admin.projectEmployees']}</f:facet>
+
+													<p:ajax event="transfer"
+														listener="#{teamEditAdminBean.onTransfer}" />
+
+													<p:column style="width:90%;">
+														<h:outputText value="#{member.lastName}" />
+													</p:column>
+												</p:pickList>
+											</p:row>
+
+											<p:row>
+												<h:outputText value="#{msg['admin.teamsName']}:" />
+												<h:inputText value="#{teamEditAdminBean.selectedTeam.name}"
+													binding="#{teamName}" />
+											</p:row>
+											<p:row>
+												<h:outputText value="#{msg['admin.teamsChangeTeam']}:" />
+												<p:selectOneMenu value="#{teamEditAdminBean.projectID}"
+													style="width:150px">
+													<f:selectItems value="#{projectService.getAll()}"
+														var="project" itemValue="#{project.id}"
+														itemLabel="#{project.name}" />
+												</p:selectOneMenu>
+											</p:row>
+
+										</p:panelGrid>
+
+										<p:commandButton value="#{msg['admin.submit']}"
+											icon="ui-icon-disk" ajax="true"
+											action="#{teamEditAdminBean.saveTeam(teamName.value)}"
+											update="rightPanelInnerID" onclick="PF('teamDialog').hide();" />
+
+										<p:commandButton value="#{msg['admin.delete']}"
+											icon="ui-icon-disk" ajax="true"
+											action="#{teamEditAdminBean.deleteTeam()}"
+											update="rightPanelInnerID" onclick="PF('teamDialog').hide();" />
+
+									</p:outputPanel>
+								</p:dialog>
+
+								<p:dialog header="#{msg['admin.teamsInfo']}"
+									widgetVar="newTeamDialog" closable="true" modal="true"
+									id="createTeam" showEffect="fade" hideEffect="fade"
+									resizable="false" styleClass="modal-dialog-teams">
+
+									<p:outputPanel id="newTeamDetail" styleClass="modal-body-teams">
+
+										<p:panelGrid columns="1" styleClass="table">
+
+											<p:row>
+												<p:pickList value="#{teamNewAdminBean.allMembers}"
+													var="member" effect="none" itemValue="#{member}"
+													itemLabel="#{member.lastName} #{member.firstName}"
+													showSourceControls="true" showTargetControls="true"
+													showCheckbox="true" responsive="true"
+													showSourceFilter="true" showTargetFilter="true"
+													filterMatchMode="contains">
+
+													<f:facet name="sourceCaption">#{msg['admin.allEmployees']}</f:facet>
+													<f:facet name="targetCaption">#{msg['admin.projectEmployees']}</f:facet>
+
+													<p:ajax event="transfer"
+														listener="#{teamNewAdminBean.onTransfer}" />
+
+													<p:column style="width:90%;">
+														<h:outputText value="#{member.lastName}" />
+													</p:column>
+												</p:pickList>
+											</p:row>
+
+											<p:row>
+												<p:column>
+													<h:outputText value="#{msg['admin.teamsName']}:" />
+												</p:column>
+												<p:column>
+													<h:inputText binding="#{newTeamNameText}" />
+												</p:column>
+											</p:row>
+
+											<p:row>
+												<p:column>
+													<h:outputText value="#{msg['admin.teamsProject']}:" />
+												</p:column>
+												<p:column>
+													<p:selectOneMenu value="#{teamNewAdminBean.projectID}"
+														style="width:200px; margin-left:2em;">
+														<f:selectItems value="#{projectService.getAll()}"
+															var="project" itemValue="#{project.id}"
+															itemLabel="#{project.name}" />
+													</p:selectOneMenu>
+												</p:column>
+											</p:row>
+										</p:panelGrid>
+
+
+
+
+
+
+										<p:commandButton value="#{msg['admin.teamsCreate']}"
+											update="rightPanelInnerID"
+											onclick="PF('newTeamDialog').hide()"
+											action="#{teamNewAdminBean.createTeam(newTeamNameText.value)}"
+											ajax="true" />
+
+
+
+									</p:outputPanel>
+								</p:dialog>
+
+							</h:form>
+
+							<h:form id="projects" rendered="#{adminPageViewBean.projects}">
+
+								<p:outputPanel styleClass="listOfprojects" layout="block">
+
+									<p:dataGrid var="project"
+										value="#{projectEditAdminBean.projects}" columns="3"
+										layout="grid" rows="3" paginator="true" id="availableProjects"
+										lazy="true" paginatorPosition="bottom"
+										paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+										rowsPerPageTemplate="3,6,12"
+										styleClass="col-lg-12 col-md-12 col-sm-10 col-xs-12 entity-container-header">
+										<f:facet name="header">
+											<span><h:outputText
+													value="#{msg['admin.projectsList']}" /></span>
+
+											<p:commandButton update="projects:newProjectDetail"
+												styleClass="button"
+												oncomplete="PF('newProjectDialog').show()"
+												value="#{msg['admin.projectsCreateProject']}"
+												id="individualFooterProject" />
+										</f:facet>
+
+										<p:panel id="pnlProject" styleClass="entity-container">
+											<f:facet name="header">
+												<p:commandButton update="projects:projectDetail"
+													oncomplete="PF('projectDialog').show()" title="View Detail"
+													icon="ui-icon ui-icon-search">
+													<f:setPropertyActionListener value="#{project}"
+														target="#{projectEditAdminBean.selectedProject}" />
+												</p:commandButton>
+												<h:outputText value="#{project.name}" />
+											</f:facet>
+
+											<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+
+												<h:outputText styleClass="userLabels"
+													value="#{msg['admin.projectsName']}:" />
+												<h:outputText styleClass="userValues"
+													value="#{project.name}" />
+
+												<h:outputText styleClass="userLabels"
+													value="#{msg['admin.projectsDescription']}:" />
+												<h:outputText styleClass="userValues"
+													value="#{project.description}" />
+
+
+												<h:outputText styleClass="userLabels"
+													value="#{msg['admin.projectsAgency']}:" />
+												<h:outputText styleClass="userValues"
+													value="#{project.agency.city}" />
+											</p:panelGrid>
+
+
+										</p:panel>
+
+
+									</p:dataGrid>
+								</p:outputPanel>
+
+								<p:dialog header="#{msg['admin.projectsInfo']}"
+									widgetVar="projectDialog" modal="true" showEffect="fade"
+									hideEffect="fade" resizable="false" styleClass="modal-dialog">
+									<p:outputPanel id="projectDetail"
+										styleClass="projectDialog modal-body-projects">
+										<p:panelGrid
+											rendered="#{projectEditAdminBean.selectedProject ne null}"
+											columns="2">
+
+											<h:outputText styleClass="userLabels"
+												value="#{msg['admin.projectsName']}:" />
+											<p:inputText styleClass="userValues"
+												value="#{projectEditAdminBean.selectedProject.name}"
+												binding="#{projectName}" />
+
+											<h:outputText styleClass="userLabels"
+												value="#{msg['admin.projectsDescription']}:" />
+											<p:inputText styleClass="userValues"
+												value="#{projectEditAdminBean.selectedProject.description}"
+												binding="#{projectDescription}" />
+
+
+											<h:outputText styleClass="userLabels"
+												value="#{msg['admin.projectsAgency']}:" />
+
+
+											<p:selectOneMenu
+												value="#{projectEditAdminBean.selectedProject.agenciesId}"
+												style="width:150px">
+
+												<f:selectItems value="#{agencyService.getAll()}"
+													var="agency" itemValue="#{agency.id}"
+													itemLabel="#{agency.city}" />
+											</p:selectOneMenu>
+
+
+
+										</p:panelGrid>
+										<p:commandButton value="#{msg['admin.submit']}"
+											icon="ui-icon-disk" ajax="true"
+											action="#{projectEditAdminBean.saveProject(projectName.value,projectDescription.value)}"
+											update="rightPanelInnerID"
+											onclick="PF('projectDialog').hide();" />
+
+										<p:commandButton value="#{msg['admin.delete']}"
+											icon="ui-icon-disk" ajax="true"
+											action="#{projectEditAdminBean.deleteProject()}"
+											update="rightPanelInnerID"
+											onclick="PF('projectDialog').hide();" />
+									</p:outputPanel>
+								</p:dialog>
+
+
+
+								<p:dialog header="#{msg['admin.projectsNew']}"
+									widgetVar="newProjectDialog" closable="false" modal="true"
+									id="createProject" showEffect="fade" hideEffect="fade"
+									resizable="false">
+									<p:outputPanel id="newProjectDetail" styleClass="projectDialog">
+										<p:panelGrid columns="2">
+
+											<p:inputText placeholder="#{msg['admin.projectsInsertName']}"
+												id="newprojectName" binding="#{newProjectName}" />
+
+											<p:inputText
+												placeholder="#{msg['admin.projectsInsertDescription']}"
+												id="newprojectDescription"
+												binding="#{newProjectDescription}" />
+
+											<h:outputText value="#{msg['admin.projectsAgency']}" />
+											<p:selectOneMenu value="#{projectNewAdminBean.agencyID}"
+												style="width:150px">
+												<f:selectItems value="#{agencyService.getAll()}"
+													var="agency" itemValue="#{agency.id}"
+													itemLabel="#{agency.city}" />
+											</p:selectOneMenu>
+
+										</p:panelGrid>
+
+										<p:commandButton value="#{msg['admin.projectsSubmitProject']}"
+											update="rightPanelInnerID"
+											onclick="PF('newProjectDialog').hide()"
+											action="#{projectNewAdminBean.createProject(newProjectName.value,newProjectDescription.value)}"
+											ajax="true" />
+
+										<p:commandButton value="#{msg['admin.projectsCancel']}"
+											update="rightPanelInnerID"
+											onclick="PF('newProjectDialog').hide()" ajax="true" />
+									</p:outputPanel>
+								</p:dialog>
+
+							</h:form>
+
+							<p:outputPanel id="users" rendered="#{adminPageViewBean.users}">
+
+
+								<p:dataTable
+									styleClass="col-lg-12 dataList entity-container-header"
+									value="#{usersAdminBean.users}" var="user"
+									widgetvar="usersList" type="ordered" itemType="none"
+									paginator="true" rows="10"
+									paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+									rowsPerPageTemplate="5,10,15" paginatorPosition="bottom">
+
+									<f:facet name="header">
+										<span><h:outputText value="#{msg['admin.usersList']}"></h:outputText></span>
+
+
+										<p:outputPanel layout="block" styleClass="button">
+											<p:commandButton value="#{msg['admin.usersAddUser']}"
+												id="addUserBtn" oncomplete="PF('addUser').show()" />
+										</p:outputPanel>
+									</f:facet>
+
+
+
+									<p:column headerText="Id">
+										<h:outputText value="#{user.id}" />
+									</p:column>
+									<p:column headerText="#{msg['admin.usersFirstName']}">
+										<h:outputText value="#{user.firstName}" />
+									</p:column>
+									<p:column headerText="#{msg['admin.usersLastName']}">
+										<h:outputText value="#{user.lastName}" />
+									</p:column>
+									<p:column headerText="#{msg['admin.usersActive']}">
+										<h:outputText value="#{user.isActive()}" />
+									</p:column>
+									<p:column style="width:55px;text-align: center">
+										<p:commandButton update="userDetailForm"
+											oncomplete="PF('userDialog').show()" icon="ui-icon-search"
+											title="View Detail" ajax="true">
+											<f:setPropertyActionListener value="#{user}"
+												target="#{usersAdminBean.selectedUser}" />
+										</p:commandButton>
+									</p:column>
+								</p:dataTable>
+
+
+
+
+
+
+								<p:dialog header="#{msg['admin.usersEditDialog']}"
+									widgetVar="userDialog" ajax="true" modal="true"
+									showEffect="blind" resizable="false" styleClass="modal-dialog">
+
+									<h:form id="userDetailForm">
+										<p:outputPanel id="userDetail" styleClass="modal-body"
+											rendered="#{usersAdminBean.rendered()}">
+
+
+											<p:outputPanel layout="block" styleClass="basic">
+												<p:outputPanel id="picturePanel">
+													<h:graphicImage id="picture" styleClass="picture"
+														value="data:#{usersAdminBean.renderPicture().typeOfImage};base64,#{usersAdminBean.renderPicture().base64Image}" />
+
+												</p:outputPanel>
+
+												<p:fileUpload
+													value="#{usersAdminBean.fileUploadManagedBean.file}"
+													immediate="true" mode="advanced"
+													fileUploadListener="#{usersAdminBean.savePic}"
+													allowTypes="/(\.|\/)(gif|jpe?g|png)$/" sizeLimit="2000000"
+														update="picture">	
+
+												</p:fileUpload>
+
+											</p:outputPanel>
+
+											<p:messages id="messages" globalOnly="true" showDetail="true"
+												autoUpdate="true" closable="true" />
+
+											<h:panelGrid columns="3" styleClass="grid" cellpadding="5"
+												id="grid">
+
+												<p:outputLabel for="firstName"
+													value="#{msg['admin.usersFirstName']}:" />
+												<p:inputText id="firstName"
+													value="#{usersAdminBean.selectedUser.firstName}"
+													maxlength="255" />
+												<p:message for="firstName" display="text" />
+
+												<p:outputLabel for="lastName"
+													value="#{msg['admin.usersLastName']}:" />
+												<p:inputText id="lastName"
+													value="#{usersAdminBean.selectedUser.lastName}"
+													maxlength="255" />
+												<p:message for="lastName" display="text" />
+
+												<p:outputLabel for="username"
+													value="#{msg['admin.usersUsername']}:" />
+
+												<p:inputText id="username"
+													value="#{usersAdminBean.username}" maxlength="255">
+													<f:ajax event="change"
+														render="usernameMessage" />
+												</p:inputText>
+												<p:message for="username" display="text"
+													id="usernameMessage">
+
+
+												</p:message>
+
+
+												<p:outputLabel for="title"
+													value="#{msg['admin.usersSelectTitle']}:" />
+												<p:selectOneMenu id="title"
+													value="#{usersAdminBean.selectedUser.title}"
+													styleClass="dropmenu" style="width:205px">
+													<f:selectItem itemLabel="Mr" itemValue="Mr" />
+													<f:selectItem itemLabel="Ms" itemValue="Ms" />
+													<f:selectItem itemLabel="Mrs" itemValue="Mrs" />
+												</p:selectOneMenu>
+												<p:message for="title" display="text" />
+
+												<p:outputLabel for="phoneNumber"
+													value="#{msg['admin.usersPhoneNumber']}:" />
+												<p:inputText id="phoneNumber"
+													validatorMessage="#{msg['admin.validatePhoneNumber']}"
+													value="#{usersAdminBean.selectedUser.phoneNumber}"
+													maxlength="45">
+													<f:validateRegex pattern="^([0-9-\+]+)$" />
+												</p:inputText>
+												<p:message for="phoneNumber" display="text" />
+
+												<h:outputLabel for="email"
+													value="#{msg['admin.usersEmail']}:" />
+												<p:inputText id="email"
+													validatorMessage="#{msg['admin.validateEmail']}"
+													value="#{usersAdminBean.email}" required="true"
+													requiredMessage="#{msg['admin.requiredEmail']}"
+													maxlength="45">
+
+													<f:validateRegex
+														pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+
+													<f:ajax event="change"
+														render="email editUserSubmitButton" />
+
+
+												</p:inputText>
+												<p:message for="email" display="text" />
+
+
+												<h:outputLabel for="city"
+													value="#{msg['admin.usersSelectCity']}:" />
+												<p:selectOneMenu id="city"
+													value="#{usersAdminBean.selectedUser.agenciesId}"
+													style="width:205px">
+
+													<f:selectItems value="#{agencyService.getAll()}"
+														var="agency" itemValue="#{agency.id}"
+														itemLabel="#{agency.city}" />
+												</p:selectOneMenu>
+												<p:message for="city" display="text" />
+
+												<h:outputLabel for="position"
+													value="#{msg['admin.usersSelectPosition']}:" />
+												<p:selectOneMenu id="position"
+													styleClass="selectOneMenuInput"
+													value="#{usersAdminBean.selectedUser.positionsId}"
+													style="width:205px">
+
+													<f:selectItems value="#{positionService.getAll()}"
+														var="position" itemValue="#{position.id}"
+														itemLabel="#{position.code}" />
+												</p:selectOneMenu>
+											</h:panelGrid>
+
+											<h:panelGrid columns="2" styleClass="secondGrid"
+												cellpadding="5">
+
+												<h:outputLabel for="role" styleClass="secondTable"
+													value="#{msg['admin.usersSelectRole']}:" />
+												<p:selectOneMenu id="role"
+													value="#{usersAdminBean.selectedUser.rolesId}"
+													styleClass="dropmenu" style="width:205px">
+
+													<f:selectItems value="#{roleService.getAll()}" var="role"
+														itemLabel="#{role.roleType}" itemValue="#{role.id}" />
+												</p:selectOneMenu>
+
+												<h:outputLabel for="active" styleClass="secondTable"
+													value="#{msg['admin.usersSelectActive']}:" />
+												<p:selectBooleanCheckbox id="active"
+													value="#{usersAdminBean.selectedUser.active}" />
+
+											</h:panelGrid>
+
+
+											<p:commandButton value="#{msg['admin.submit']}" 
+												action="#{usersAdminBean.save}" update="users" id="editUserSubmitButton"  />
+											<p:commandButton value="#{msg['admin.removePic']}"
+												id="removePic" action="#{usersAdminBean.removePic}"
+												update="picture" oncomplete="PF('userDialog').show()"
+												rendered="#{usersAdminBean.selectedUser.picture ne null}" />
+
+										</p:outputPanel>
+									</h:form>
+								</p:dialog>
+
+
+								<h:form id="createUserForm" enctype="multipart/form-data"
+									rendered="#{usersAdminBean.newUser.id eq null}">
+									<p:dialog header="Add User" widgetVar="addUser" modal="true"
+										showEffect="blind" resizable="false" styleClass="modal-dialog">
+										<p:outputPanel id="addUserDetail" styleClass="modal-body">
+
+
+											<p:panelGrid styleClass="addUserTable" columns="2"
+												cellpadding="5">
+
+												<h:outputLabel for="firstName"
+													value="#{msg['admin.usersFirstName']}:" />
+												<p:inputText id="firstName"
+													value="#{usersAdminBean.newUser.firstName}"
+													styleClass="inputTextField" maxlength="255" />
+
+												<h:outputLabel for="lastName"
+													value="#{msg['admin.usersLastName']}:" />
+												<p:inputText id="lastName"
+													value="#{usersAdminBean.newUser.lastName}" required="true"
+													requiredMessage="Last name is required!" maxlength="255" />
+
+												<p:outputLabel for="title"
+													value="#{msg['admin.usersSelectTitle']}:" />
+												<p:selectOneMenu id="title"
+													value="#{usersAdminBean.newUser.title}"
+													styleClass="dropmenu" style="width:205px">
+													<f:selectItem itemLabel="Mr" itemValue="Mr" />
+													<f:selectItem itemLabel="Ms" itemValue="Ms" />
+													<f:selectItem itemLabel="Mrs" itemValue="Mrs" />
+												</p:selectOneMenu>
+
+												<h:outputLabel for="phoneNumber"
+													value="#{msg['admin.usersPhoneNumber']}:" />
+												<p:inputText id="phoneNumber"
+													value="#{usersAdminBean.newUser.phoneNumber}"
+													maxlength="45">
+													<f:validateRegex pattern="^([0-9-\+]+)$" />
+												</p:inputText>
+
+												<h:outputLabel for="email"
+													value="#{msg['admin.usersEmail']}:" />
+												<p:inputText id="email"
+													validatorMessage="Invalid email format"
+													value="#{usersAdminBean.newUser.email}" required="true"
+													requiredMessage="Email is required!" maxlength="45">
+
+													<f:validateRegex
+														pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+
+												</p:inputText>
+
+												<h:outputLabel for="username"
+													value="#{msg['admin.usersUsername']}:" />
+												<p:inputText id="username"
+													value="#{usersAdminBean.newUser.username}" required="true"
+													requiredMessage="Username is required!" maxlength="45" />
+
+												<h:outputLabel for="pwd"
+													value="#{msg['admin.usersPassword']}:" />
+												<p:password id="pwd"
+													value="#{usersAdminBean.newUser.password}" required="true"
+													requiredMessage="Password is required!" maxlength="45" />
+
+
+												<h:outputLabel for="city"
+													value="#{msg['admin.usersSelectAgency']}:" />
+												<p:selectOneMenu id="city" required="true"
+													value="#{usersAdminBean.newUser.agenciesId}"
+													style="width:205px" styleClass="selectOneMenuInput"
+													requiredMessage="City is required! ">
+
+
+													<f:selectItems value="#{agencyService.getAll()}"
+														var="agency" itemValue="#{agency.id}"
+														itemLabel="#{agency.city}" />
+												</p:selectOneMenu>
+
+												<h:outputLabel for="position"
+													value="#{msg['admin.usersSelectPosition']}:" />
+												<p:selectOneMenu id="position"
+													value="#{usersAdminBean.newUser.positionsId}"
+													style="width:205px">
+
+
+													<f:selectItems value="#{positionService.getAll()}"
+														var="position" itemValue="#{position.id}"
+														itemLabel="#{position.code}" />
+												</p:selectOneMenu>
+
+												<h:outputLabel for="role"
+													value="#{msg['admin.usersSelectRole']}:" />
+												<p:selectOneMenu id="role"
+													value="#{usersAdminBean.newUser.rolesId}"
+													styleClass="dropmenu" style="width:205px">
+
+													<f:selectItems value="#{roleService.getAll()}" var="role"
+														itemLabel="#{role.roleType}" itemValue="#{role.id}" />
+												</p:selectOneMenu>
+											</p:panelGrid>
+
+											<p:commandButton ajax="true" value="#{msg['admin.submit']}"
+												id="persistUser" action="#{usersAdminBean.add}"
+												styleClass="savebtn" update="users" />
+
+
+										</p:outputPanel>
+									</p:dialog>
+								</h:form>
+							</p:outputPanel>
+
+							<h:form id="periodsForm" rendered="#{adminPageViewBean.periods}">
+
+
+								<h:outputLabel id="display">
+
+
+
+									<h3>#{msg['admin.periodsEdit']}</h3>
+									<h:panelGrid columns="1" style="margin-bottom: 10px">
+										<p:selectOneMenu id="country"
+											value="#{periodsAdminBean.selectedCountryId}"
+											style="width:150px">
+											<p:ajax update="display" />
+											<f:selectItems value="#{changePeriodAdminBean.allCountry}"
+												var="country" itemValue="#{country.id}"
+												itemLabel="#{country.name}" />
+										</p:selectOneMenu>
+										<p:outputLabel id="displayRange">
+											<h:outputText
+												value="#{msg['admin.periodsUntil']} #{periodsAdminBean.lastRecommendationDay}: #{msg['admin.periodsRecommendation']}" />
+											<br> </br>
+											<h:outputText
+												value="#{msg['admin.periodsBetween']} #{periodsAdminBean.lastRecommendationDay} #{msg['admin.periodsAnd']} #{periodsAdminBean.lastVotingDay}: #{msg['admin.periodsVoting']}" />
+											<br> </br>
+											<h:outputText
+												value="#{msg['admin.periodsAfter']} #{periodsAdminBean.lastVotingDay}: #{msg['admin.periodsResults']}" />
+										</p:outputLabel>
+										<p:slider for="recommendation,voting" display="displayRange"
+											style="width: 400px" range="true"
+											displayTemplate="#{msg['admin.periodsSelectBetween']} {min} #{msg['admin.periodsAnd']} {max} #{msg['admin.periodsSelectVoting']}"
+											minValue="1" maxValue="#{periodsAdminBean.setNumberOfDays()}" />
+									</h:panelGrid>
+									<h:inputHidden id="recommendation"
+										value="#{periodsAdminBean.newLastRecommendationDay}" />
+									<h:inputHidden id="voting"
+										value="#{periodsAdminBean.newLastVotingDay}" />
+
+
+
+
+
+									<p:commandButton value="#{msg['admin.periodsSubmit']}"
+										id="submit" action="#{periodsAdminBean.submitNewPeriod()}"
+										update="display" />
+								</h:outputLabel>
+							</h:form>
+
+						</h:panelGrid>
+					</div>
+				</div>
+			</div>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

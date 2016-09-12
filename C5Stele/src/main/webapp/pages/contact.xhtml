@@ -1,0 +1,86 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+	<ui:composition template="template.xhtml">
+
+		<ui:define name="header">
+			<ui:param name="pageParam" value="contact" />
+			<ui:include src="header.xhtml" />
+		</ui:define>
+
+		<ui:define name="content" styleClass="content">
+			<h:outputStylesheet name="css/contact.css" />
+
+			<h:panelGroup layout="block" styleClass="col-md-10" id="mainWrapper">
+				<h:panelGroup layout="block" styleClass="col-md-6" id="leftPanel">
+					<h:form layout="block" id="contactForm">
+
+						<div class="formRow">
+							<p:inputText placeholder="#{msg['contact.yourName']}" styleClass="inputContact"
+								value="#{contactBean.name}" />
+						</div>
+
+						<div class="formRow">
+							<p:inputText placeholder="#{msg['contact.yourEmail']}" styleClass="inputContact"  requiredMessage="#{msg['contact.fieldCannotBeEmpty']}"
+								id="email" validatorMessage="#{msg['contact.emailErrorFormat']}" required="true"
+								value="#{contactBean.email}">
+								<f:validateRegex
+									pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$"/>
+							</p:inputText>
+
+							<p:message for="email" display="text" styleClass="errorMessage" />
+						</div>
+						<div class="formRow">
+							<label for="contactForm:message"></label>
+							<p:inputTextarea value="#{contactBean.message}" rows="5" id="message"
+								placeholder="#{msg['contact.typeMessage']}" styleClass="inputContact" required="true"
+								label="message" requiredMessage="#{msg['contact.fieldCannotBeEmpty']}" />
+							<p:message for="message" display="text" />
+
+						</div>
+
+
+						<p:commandButton value="#{msg['contact.submit']}"
+							action="#{contactBean.sendMessage}"
+							styleClass="submitContactButton" update="contactForm" />
+						<span class="mandatoryFields">#{msg['contact.mandatory']} </span>
+					</h:form>
+				</h:panelGroup>
+
+				<h:panelGroup layout="block" styleClass="col-md-4" id="rightPanel">
+
+					<ui:repeat var="listContacts" value="#{contactBean.data}"
+						varStatus="status">
+						<dl>
+							<dt>
+								<h:outputText styleClass="infoTitle" value="#{listContacts.site}" escape="false" />
+							</dt>
+
+							<dd>
+								<h:outputText styleClass="infos" value="#{listContacts.address}"
+									escape="false" />
+							</dd>
+
+							<dd>
+								<h:outputText styleClass="infos" value="#{listContacts.phone}"
+									escape="false" />
+							</dd>
+
+							<dd>
+								<h:outputText styleClass="infos" value="#{listContacts.fax}"
+									escape="false" />
+							</dd>
+						</dl>
+					</ui:repeat>
+
+				</h:panelGroup>
+
+			</h:panelGroup>
+
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

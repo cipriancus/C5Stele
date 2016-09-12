@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://java.sun.com/xml/ns/javaee"
+xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" 
+ version="3.0">
+  <display-name>C5Stele</display-name>
+  
+  <listener>
+    <listener-class>
+  			 org.springframework.web.context.ContextLoaderListener
+  		</listener-class>
+  </listener>
+  
+  <context-param>
+    <param-name>primefaces.UPLOADER</param-name>
+    <param-value>auto</param-value>
+  </context-param>
+  
+  <context-param>
+    <param-name>javax.faces.PROJECT_STAGE</param-name>
+    <param-value>Production</param-value>
+  </context-param>
+  
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>
+    /WEB-INF/security.xml
+    /WEB-INF/applicationContext.xml
+    </param-value>
+  </context-param>
+
+  <listener>
+    <listener-class>
+   			org.springframework.web.context.request.RequestContextListener
+  		</listener-class>
+  </listener>
+  
+  <servlet>
+    <servlet-name>Faces Servlet</servlet-name>
+    <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>Faces Servlet</servlet-name>
+    <url-pattern>*.xhtml</url-pattern>
+  </servlet-mapping>
+  
+  <session-config>
+		<session-timeout>48000</session-timeout>
+	</session-config>
+	
+   <error-page>
+   	<exception-type>javax.faces.application.ViewExpiredException</exception-type>
+   	<location>/pages/index.xhtml</location>
+   </error-page>
+   
+   <context-param>
+		<param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+		<param-value>server</param-value>
+	</context-param>
+
+    <context-param>
+        <param-name>facelets.SKIP_COMMENTS</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    
+    <welcome-file-list>
+    	<welcome-file>pages/index.xhtml</welcome-file>
+  	</welcome-file-list>
+  
+  
+  <!-- Declare the Spring filter -->
+	<filter>
+    	<filter-name>springSecurityFilterChain</filter-name>
+    	<filter-class>
+        	org.springframework.web.filter.DelegatingFilterProxy
+    	</filter-class>
+	</filter>
+
+<!-- Defines urls pattern on which the filter is applied -->
+	<filter-mapping>
+    	<filter-name>springSecurityFilterChain</filter-name>
+    	<url-pattern>/*</url-pattern>
+    	<dispatcher>FORWARD</dispatcher>
+    	<dispatcher>REQUEST</dispatcher><!-- mandatory to allow the managed bean to forward the request to the filter -->
+	</filter-mapping>
+  
+  <filter>
+    <filter-name>PrimeFaces FileUpload Filter</filter-name>
+    <filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>PrimeFaces FileUpload Filter</filter-name>
+    <servlet-name>Faces Servlet</servlet-name>
+  </filter-mapping>
+  
+   <servlet>
+      <servlet-name>dispatcherServler</servlet-name>
+      <servlet-class>
+         org.springframework.web.servlet.DispatcherServlet
+      </servlet-class>
+      <load-on-startup>1</load-on-startup>
+   </servlet>
+
+    <servlet-mapping>
+      <servlet-name>dispatcherServler</servlet-name>
+      <url-pattern>/activation</url-pattern>
+   </servlet-mapping>
+   
+     <servlet-mapping>
+      <servlet-name>dispatcherServler</servlet-name>
+      <url-pattern>/reset</url-pattern>
+   </servlet-mapping>
+
+    <mime-mapping>
+		<extension>xhtml</extension>
+		<mime-type>text/html</mime-type>
+	</mime-mapping>
+   
+</web-app>

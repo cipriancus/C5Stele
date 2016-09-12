@@ -1,0 +1,209 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:body>
+
+	<ui:composition template="template.xhtml">
+
+		<ui:define name="content" styleClass="content">
+			<h:outputStylesheet name="css/register.css" />
+
+			<h:form layout="block" id="registrationForm" styleClass="outer">
+
+				<p:outputPanel layout="block" styleClass="middle">
+					<p:growl id="growl" sticky="true" showDetail="true" />
+
+
+					<p:outputPanel styleClass="basic">
+						<p:wizard flowListener="#{registrationBean.onFlowProcess}">
+							<p:tab id="personal" title="Personal">
+								<p:outputPanel styleClass="dummy">
+									<p:panel header="Personal Details">
+										<p:messages />
+
+										<p:outputPanel>
+											<h:outputText styleClass="text" value="First name* 	" />
+											<p:inputText value="#{registrationBean.user.firstName}"
+												required="true" requiredMessage="First name is required!"
+												label="Firstname" maxlength="255" />
+										</p:outputPanel>
+										<br />
+										<p:outputPanel>
+											<h:outputText styleClass="text" value="Last name*  " />
+											<p:inputText value="#{registrationBean.user.lastName}"
+												required="true" requiredMessage="Last name is required!"
+												label="Lastname" maxlength="255" />
+										</p:outputPanel>
+										<br />
+										<label class="text">Title </label>
+										<p:selectOneMenu id="title"
+											value="#{registrationBean.user.title}" style="width:125px">
+											<f:selectItem itemLabel="Select One" itemValue="" />
+											<f:selectItem itemLabel="Mr" itemValue="Mr" />
+											<f:selectItem itemLabel="Ms" itemValue="Ms" />
+											<f:selectItem itemLabel="Mrs" itemValue="Mrs" />
+										</p:selectOneMenu>
+									</p:panel>
+								</p:outputPanel>
+							</p:tab>
+
+							<p:tab id="contact" title="Contact">
+								<p:panel header="Contact Information">
+									<p:messages />
+									<p:outputPanel>
+										<h:outputText styleClass="text" value="Phone Number* " />
+										<p:inputText id="phoneNumber" required="true"
+											requiredMessage="Phone number is required!"
+											value="#{registrationBean.user.phoneNumber}" maxlength="45" >
+											<f:validateRegex pattern="^([0-9-\+]+)$" />
+										</p:inputText>
+									</p:outputPanel>
+
+									<p:outputPanel>
+										<br />
+										<h:outputText styleClass="text" value="E-mail* " />
+										<p:inputText id="email"
+											validatorMessage="Invalid email format"
+											value="#{registrationBean.user.email}" required="true"
+											requiredMessage="Email is required!" maxlength="45" >
+
+											<f:validateRegex
+												pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+
+										</p:inputText>
+									</p:outputPanel>
+									<br />
+									<h:outputText styleClass="text" value="City* " />
+									<p:selectOneMenu id="city" required="true"
+										value="#{registrationBean.user.agenciesId}"
+										style="width:125px" requiredMessage="City is required! ">
+
+										<f:selectItem itemLabel="Select One" itemValue="" />
+										<f:selectItems value="#{registrationBean.agencies}"
+											var="agency" itemValue="#{agency.id}"
+											itemLabel="#{agency.city}" />
+									</p:selectOneMenu>
+									<br />
+									<h:outputText styleClass="text" value="Position* " />
+									<p:selectOneMenu id="position" required="true"
+										value="#{registrationBean.user.positionsId}"
+										style="width:125px" requiredMessage="Position is required! ">
+
+										<f:selectItem itemLabel="Select One" itemValue="" />
+										<f:selectItems value="#{registrationBean.positions}"
+											var="position" itemValue="#{position.id}"
+											itemLabel="#{position.code}" />
+									</p:selectOneMenu>
+								</p:panel>
+							</p:tab>
+
+
+
+							<p:tab id="account" title="Account">
+								<p:panel header="Account Details">
+									<p:messages />
+
+									<p:outputPanel>
+										<h:outputText styleClass="text" value="Username*" />
+										<p:inputText value="#{registrationBean.user.username}"
+											required="true" requiredMessage="Username is required!"
+											label="Username" maxlength="45" />
+									</p:outputPanel>
+									<br />
+									<p:outputPanel>
+										<h:outputText styleClass="text" for="pwd1" value="Password*" />
+										<p:password id="pwd1"
+											value="#{registrationBean.user.password}" match="pwd2"
+											label="Password 1" required="true"
+											requiredMessage="Password is required!" feedback="true" maxlength="45" />
+										<br />
+										<br />
+										<h:outputText styleClass="text" for="pwd2"
+											value="Confirm password*" />
+										<p:password id="pwd2"
+											value="#{registrationBean.user.password}" label="Password 2"
+											required="true" />
+									</p:outputPanel>
+									<br />
+									<h:outputText styleClass="text" value="Profile picture: " />
+									<br />
+									<br />
+									<h:form enctype="multipart/form-data" style="width:500px">
+										<p:fileUpload value="#{fileUploadManagedBean.file}"
+											immediate="true" mode="advanced"
+											fileUploadListener="#{fileUploadManagedBean.fileUploadListener}"
+											allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+											sizeLimit="2000000">
+										</p:fileUpload>
+									</h:form>
+								</p:panel>
+							</p:tab>
+
+							<p:tab styleClass="basic" id="confirm" title="Confirmation">
+								<p:panel header="Confirmation">
+
+									<p:outputPanel styleClass="panel">
+
+										<h:outputText styleClass="textConfirm"
+											value="Profile picture: " />
+
+										<ui:fragment rendered="true">
+											<img class="previewImage"
+												src="data:#{registrationBean.picture.typeOfImage};base64,#{registrationBean.picture.base64Image}" />
+										</ui:fragment>
+
+										<h:outputText styleClass="textConfirm"
+											value="First name: #{registrationBean.user.firstName}" />
+
+										<h:outputText styleClass="textConfirm"
+											value="Last name: #{registrationBean.user.lastName}" />
+
+										<h:outputText styleClass="textConfirm"
+											value="Title: #{registrationBean.user.title}" />
+
+									</p:outputPanel>
+
+									<p:outputPanel>
+										<h:outputText styleClass="textConfirm"
+											value="Phone number: #{registrationBean.user.phoneNumber}" />
+
+										<h:outputText styleClass="textConfirm"
+											value="E-mail: #{registrationBean.user.email}" />
+
+										<h:outputText styleClass="textConfirm"
+											value="City: #{registrationBean.user.agenciesId} #{registrationBean.user.agency.city}" />
+
+										<h:outputText styleClass="textConfirm"
+											value="Position: #{registrationBean.user.positionsId} #{registrationBean.user.position.code}" />
+
+									</p:outputPanel>
+
+									<p:outputPanel>
+										<h:outputText styleClass="textConfirm"
+											value="Username: #{registrationBean.user.username}" />
+
+										<h:outputText styleClass="textConfirm"
+											value="Password: #{registrationBean.user.password}" />
+
+									</p:outputPanel>
+
+
+									<p:commandButton value="Submit"
+										action="#{registrationBean.save}" />
+								</p:panel>
+							</p:tab>
+						</p:wizard>
+					</p:outputPanel>
+				</p:outputPanel>
+			</h:form>
+
+
+		</ui:define>
+
+
+	</ui:composition>
+</h:body>
+</html>

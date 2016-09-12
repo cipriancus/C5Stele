@@ -1,0 +1,876 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+<h:body styleClass="container-fluid">
+	<ui:composition template="template.xhtml">
+
+		<ui:define name="header">
+			<ui:param name="pageParam" value="home" />
+			<ui:include src="header.xhtml" />
+		</ui:define>
+
+		<ui:define name="content" styleClass="content">
+			<h:outputStylesheet name="css/bootstrap.min.css" />
+			<h:outputStylesheet name="css/dashboard.css" />
+			<h:form id="welcomeForm" styleClass="row">
+				<p:outputPanel layout="block" styleClass="welcome">
+					<p:fieldset legend="#{msg['dashboard.welcomeTitle']}"
+						styleClass="legend">
+						<h:panelGrid columns="1" cellpadding="5">
+							<h:outputText value="#{msg['dashboard.recommendationMessage']}"
+								rendered="#{dashboardBean.isRecommendationPeriod()}" />
+							<h:outputText value="#{msg['dashboard.votingMessage']}"
+								rendered="#{dashboardBean.isVotingPeriod()}" />
+							<h:outputText value="#{msg['dashboard.winnerMessage']}"
+								rendered="#{dashboardBean.isWinnerPeriod()}" />
+						</h:panelGrid>
+
+
+						<p:outputPanel
+							rendered="#{dashboardBean.isRecommendationPeriod()}"
+							layout="block" styleClass="row list">
+							<p:dataList id="currCandList"
+								styleClass="col-lg-offset-1 col-lg-4 welcomeCandList"
+								value="#{dashboardBean.candidates}" var="cand" type="ordered">
+								<f:facet name="header">
+									<h:outputText
+										value="#{msg['dashboard.welcomeHeaderCandidates']}" />
+								</f:facet>
+								<h:outputText
+									value="#{cand.candUser.title} #{cand.candUser.lastName} #{cand.candUser.firstName}, #{cand.candUser.agency.city}" />
+							</p:dataList>
+
+							<p:dataList id="currTeamList"
+								styleClass="col-lg-offset-2 col-lg-4"
+								value="#{dashboardBean.teamCandidates}" var="team"
+								type="ordered">
+								<f:facet name="header">
+									<h:outputText
+										value="#{msg['dashboard.welcomeHeaderTeamCandidates']}" />
+								</f:facet>
+								<h:outputText
+									value="#{msg['dashboard.team']} #{team.candTeam.name} #{team.candTeam.project.agency.city}, #{msg['dashboard.project']} #{team.candTeam.project.name}" />
+							</p:dataList>
+						</p:outputPanel>
+
+						<p:outputPanel rendered="#{dashboardBean.isVotingPeriod()}"
+							layout="block" styleClass="row">
+							<p:chart styleClass="col-lg-offset-1 col-lg-4 chart" type="pie"
+								model="#{pieBean.pieModelUser}"
+								rendered="#{dashboardBean.existsUserVotes()}" responsive="true" />
+
+							<p:chart styleClass="col-lg-offset-2 col-lg-4 chart" type="pie"
+								model="#{pieBean.pieModelTeam}"
+								rendered="#{dashboardBean.existsTeamVotes()}" responsive="true" />
+						</p:outputPanel>
+
+						<p:outputPanel rendered="#{dashboardBean.isWinnerPeriod()}"
+							layout="block" styleClass="winner">
+							<p:outputPanel rendered="#{dashboardBean.existsWinningUser()}">
+								<h3>#{msg['dashboard.congratulations']}
+									#{msg['template.title']}</h3>
+								<p:panelGrid columns="2">
+									<f:facet name="header">
+										<h:graphicImage id="winnerPic" styleClass="winnerPic"
+											value="data:#{dashboardBean.currentWinner.typeOfImage};base64,#{dashboardBean.currentWinner.base64Image}" />
+									</f:facet>
+
+									<h:outputText value="#{msg['dashboard.name']}:" />
+									<h:outputText
+										value="#{dashboardBean.currentWinner.lastName} #{dashboardBean.currentWinner.firstName}" />
+
+									<h:outputText value="#{msg['dashboard.agency']}" />
+									<h:outputText
+										value="#{dashboardBean.currentWinner.candUser.agency.city}" />
+
+									<h:outputText value="#{msg['dashboard.position']}" />
+									<h:outputText
+										value="#{dashboardBean.currentWinner.candUser.position.code}" />
+
+									<h:outputText value="#{msg['dashboard.numberOfVotes']}" />
+									<h:outputText value="#{dashboardBean.currentWinner.noOfVotes}" />
+
+									<h:outputText value="#{msg['dashboard.reason']}" />
+									<h:outputText value="#{dashboardBean.winnerReasons}" />
+								</p:panelGrid>
+							</p:outputPanel>
+
+							<p:outputPanel rendered="#{dashboardBean.existsWinningTeam()}">
+								<h3>#{msg['dashboard.congratulations']}
+									#{msg['dashboard.fiveStarWinnerTeam']}</h3>
+								<p:panelGrid columns="2">
+
+									<h:outputText value="#{msg['dashboard.name']}:" />
+									<h:outputText
+										value="#{dashboardBean.currentTeamWinner.teamName}" />
+
+									<h:outputText value="#{msg['dashboard.city']}" />
+
+									<h:outputText value="#{dashboardBean.currentTeamWinner.city}" />
+
+									<h:outputText value="#{msg['dashboard.numberOfVotes']}" />
+									<h:outputText
+										value="#{dashboardBean.currentTeamWinner.noOfVotes}" />
+
+								</p:panelGrid>
+							</p:outputPanel>
+
+
+						</p:outputPanel>
+
+						<p:outputLabel rendered="#{dashboardBean.noWinner()}">
+							<h3>#{msg['dashboard.noWinner']}</h3>
+						</p:outputLabel>
+
+						<p:outputPanel layout="block">
+							<p:commandButton id="historyBtn" styleClass="customBtn"
+								value="#{dashboardBean.historyButton()} #{msg['dashboard.history']}"
+								actionListener="#{dashboardBean.switchShowHistory}"
+								update="history historyBtn" />
+						</p:outputPanel>
+
+						<p:outputPanel id="history" layout="block">
+							<p:outputPanel rendered="#{dashboardBean.showHistory}">
+								<h3 class="winnerText">#{msg['dashboard.userRingTitle']}</h3>
+								<p:selectOneButton value="#{dashboardBean.noOfWinners}"
+									rendered="#{!empty dashboardBean.winners}">
+									<f:selectItem itemLabel="1" itemValue="1" />
+									<f:selectItem itemLabel="2" itemValue="2" />
+									<f:selectItem itemLabel="3" itemValue="3" />
+									<f:selectItem itemLabel="4" itemValue="4" />
+									<f:selectItem itemLabel="5" itemValue="5" />
+									<p:ajax update="userRing"
+										listener="#{dashboardBean.changeWinners}" />
+								</p:selectOneButton>
+								<p:outputPanel styleClass="nullMessage">
+									<h:outputText value="#{msg['dashboard.nullWinnersMessage']}"
+										rendered="#{empty dashboardBean.winners}" />
+								</p:outputPanel>
+								<p:panel rendered="#{!empty dashboardBean.winners}"
+									styleClass="historyPanel">
+									<p:ring id="userRing" value="#{dashboardBean.winners}"
+										var="win" styleClass="image-ring" easing="easeInOutBack">
+										<p:outputPanel styleClass="ringDiv" layout="block">
+											<h:outputText value="#{win.lastName} #{win.firstName}" />
+											<br />
+											<h:outputText value="#{win.lastVotingDay}">
+												<f:convertDateTime pattern="YYYY-MM" />
+											</h:outputText>
+											<br />
+											<h:graphicImage id="img" styleClass="ringImage"
+												value="data:#{win.typeOfImage};base64,#{win.base64Image}" />
+										</p:outputPanel>
+									</p:ring>
+								</p:panel>
+
+								<p:outputPanel layout="block">
+									<h3 class="winnerText">#{msg['dashboard.teamRingTitle']}</h3>
+									<p:selectOneButton value="#{dashboardBean.noOfTeamWinners}"
+										rendered="#{!empty dashboardBean.teamWinners}">
+										<f:selectItem itemLabel="1" itemValue="1" />
+										<f:selectItem itemLabel="2" itemValue="2" />
+										<f:selectItem itemLabel="3" itemValue="3" />
+										<f:selectItem itemLabel="4" itemValue="4" />
+										<f:selectItem itemLabel="5" itemValue="5" />
+										<p:ajax update="teamRing"
+											listener="#{dashboardBean.changeTeamWinners}" />
+									</p:selectOneButton>
+									<p:outputPanel styleClass="nullMessage">
+										<h:outputText value="#{msg['dashboard.nullWinnersMessage']}"
+											rendered="#{empty dashboardBean.teamWinners}" />
+									</p:outputPanel>
+									<p:panel rendered="#{!empty dashboardBean.teamWinners}"
+										styleClass="historyPanel">
+										<p:ring id="teamRing" value="#{dashboardBean.teamWinners}"
+											var="win" styleClass="simple-ring" easing="easeInOutBack">
+											<p:outputPanel styleClass="ringDiv" layout="block">
+												<h:outputText
+													value="#{msg['dashboard.team']} #{win.teamName}" />
+												<br />
+												<h:outputText value="#{win.city}" />
+												<br />
+												<h:outputText value="#{win.lastVotingDay}">
+													<f:convertDateTime pattern="YYYY-MM" />
+												</h:outputText>
+											</p:outputPanel>
+										</p:ring>
+									</p:panel>
+								</p:outputPanel>
+							</p:outputPanel>
+						</p:outputPanel>
+
+					</p:fieldset>
+
+
+				</p:outputPanel>
+
+			</h:form>
+
+			<p:outputPanel rendered="#{dashboardBean.isRecommendationPeriod()}"
+				layout="block" styleClass="recommend">
+
+				<h:form id="userForm">
+
+
+
+					<p:outputPanel layout="block" styleClass="row">
+
+						<p:dataGrid var="user" value="#{dashboardBean.users}" columns="3"
+							layout="grid" rows="3" paginator="true" id="availableUsers"
+							lazy="true" paginatorPosition="bottom"
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="3,6,12"
+							styleClass="col-lg-8 userCarousel entity-container-header">
+
+							<f:facet name="header">
+								<span><h:outputText
+										value="#{msg['dashboard.employeesListTitle']}" /></span>
+
+
+
+
+								<p:inputText id="userFilter" value="#{dashboardBean.userFilter}"
+									styleClass="filtertext"
+									placeholder="#{msg['dashboard.filterPlaceholder']}">
+									<p:ajax event="blur" listener="#{dashboardBean.filterUsers}"
+										update="availableUsers" />
+								</p:inputText>
+
+
+							</f:facet>
+
+							<p:panel id="pnlUser" styleClass="col-xs-6-push entity-container">
+
+								<f:facet name="header">
+
+									<p:commandButton update="userForm:userDetail"
+										title="#{msg['dashboard.dialogTitle']}"
+										icon="ui-icon ui-icon-search"
+										oncomplete="PF('userDialog').show()"
+										styleClass="customBtn no-border-button"
+										id="individualFooterUser">
+										<f:setPropertyActionListener value="#{user}"
+											target="#{dashboardBean.selectedUser}" />
+									</p:commandButton>
+
+									<h:outputText
+										value="#{user.title} #{user.lastName} #{user.firstName}"></h:outputText>
+
+								</f:facet>
+
+								<p:outputPanel layout="block" styleClass="left"
+									widgetVar="usersTable">
+									<h:outputText styleClass="userLabels"
+										value="#{msg['dashboard.agency']}:" />
+									<br />
+									<h:outputText styleClass="userValues"
+										value="#{user.agency.city}" />
+									<h:outputText styleClass="userLabels"
+										value="#{msg['dashboard.position']}:" />
+									<br />
+									<h:outputText styleClass="userValues"
+										value="#{user.position.code}" />
+
+								</p:outputPanel>
+
+								<p:outputPanel layout="block">
+									<img class="gridImage col-xs-6-pull"
+										src="data:#{user.picture.typeOfImage};base64,#{user.picture.base64Image}" />
+								</p:outputPanel>
+
+								<div class="clear"></div>
+							</p:panel>
+
+							<p:draggable for="pnlUser" revert="true"
+								handle=".ui-panel-titlebar" stack=".ui-panel" zindex="5"
+								scope="user" />
+
+						</p:dataGrid>
+
+						<p:outputPanel layout="block"
+							styleClass="col-lg-offset-1 col-lg-3">
+
+							<p:fieldset id="chosenUser"
+								legend="#{msg['dashboard.selectedUser']}"
+								styleClass="chosenBox legend">
+								<p:outputPanel id="dropAreaUsers">
+									<h:outputText value="#{msg['dashboard.dropRecommendation']}"
+										rendered="#{dashboardBean.chosenUser eq null}"
+										styleClass="chosenText" />
+									<h:panelGrid columns="2" styleClass="chosenPanel"
+										id="chosenUserTable" value="#{dashboardBean.chosenUser}"
+										rendered="#{dashboardBean.chosenUser ne null}">
+										<h:outputText value="#{msg['dashboard.title']}:" />
+										<h:outputText styleClass="userValues"
+											value="#{dashboardBean.chosenUser.title}" />
+
+										<h:outputText value="#{msg['dashboard.firstName']}:" />
+										<h:outputText styleClass="userValues"
+											value="#{dashboardBean.chosenUser.firstName}" />
+
+										<h:outputText value="#{msg['dashboard.lastName']}:" />
+										<h:outputText styleClass="userValues"
+											value="#{dashboardBean.chosenUser.lastName}" />
+
+										<h:outputText value="#{msg['dashboard.agency']}:" />
+										<h:outputText styleClass="userValues"
+											value="#{dashboardBean.chosenUser.agency.city}" />
+
+										<h:outputText value="#{msg['dashboard.position']}:" />
+										<h:outputText styleClass="userValues"
+											value="#{dashboardBean.chosenUser.position.code}" />
+
+									</h:panelGrid>
+								</p:outputPanel>
+							</p:fieldset>
+
+							<p:inputTextarea id="reasonUser" styleClass="reason" rows="3"
+								cols="20" value="#{dashboardBean.userReason}"
+								counter="counterUser" maxlength="256"
+								counterTemplate="{0} #{msg['dashboard.charactersRemaining']}"
+								autoResize="true" />
+							<p:watermark for="reasonUser" value="#{msg['dashboard.reason']}"
+								id="watermarkUser" />
+							<h:outputText id="counterUser" />
+
+							<p:commandButton styleClass="submit customBtn"
+								value="#{msg['dashboard.confirm']}"
+								action="#{dashboardBean.saveUser}"
+								update="growlmsg2 welcomeForm" ajax="true" />
+
+						</p:outputPanel>
+
+						<p:droppable for="chosenUser" tolerance="touch"
+							activeStyleClass="ui-state-highlight" datasource="availableUsers"
+							onDrop="handleDrop" scope="user">
+							<p:ajax listener="#{dashboardBean.onUserDrop}"
+								update="dropAreaUsers availableUsers" />
+						</p:droppable>
+					</p:outputPanel>
+
+					<p:dialog header="#{msg['dashboard.userDialogTitle']}"
+						widgetVar="userDialog" modal="true" showEffect="fade"
+						hideEffect="fade" resizable="false">
+						<p:outputPanel id="userDetail" styleClass="userDialog">
+							<p:panelGrid columns="2"
+								rendered="#{dashboardBean.selectedUser ne null}">
+								<f:facet name="header">
+									<img class="dialogImage"
+										src="data:#{dashboardBean.selectedUser.picture.typeOfImage};base64,#{dashboardBean.selectedUser.picture.base64Image}" />
+								</f:facet>
+
+								<h:outputText value="#{msg['dashboard.title']}:" />
+								<h:outputText value="#{dashboardBean.selectedUser.title}" />
+
+								<h:outputText value="#{msg['dashboard.firstName']}:" />
+								<h:outputText value="#{dashboardBean.selectedUser.firstName}" />
+
+								<h:outputText value="#{msg['dashboard.lastName']}:" />
+								<h:outputText value="#{dashboardBean.selectedUser.lastName}" />
+
+								<h:outputText value="#{msg['dashboard.agency']}:" />
+								<h:outputText value="#{dashboardBean.selectedUser.agency.city}" />
+
+								<h:outputText value="#{msg['dashboard.position']}:" />
+								<h:outputText
+									value="#{dashboardBean.selectedUser.position.code}" />
+							</p:panelGrid>
+						</p:outputPanel>
+					</p:dialog>
+
+				</h:form>
+
+				<h:form id="teamForm">
+
+
+
+
+					<p:outputPanel layout="block" styleClass="row">
+
+						<p:dataGrid var="team" value="#{dashboardBean.teams}" columns="4"
+							layout="grid" rows="4" paginator="true" id="availableTeams"
+							lazy="true" paginatorPosition="bottom"
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="4,6,12"
+							styleClass="col-lg-8 userCarousel entity-container-header">
+
+							<f:facet name="header">
+
+								<span><h:outputText
+										value="#{msg['dashboard.teamsListTitle']}" /></span>
+
+
+
+								<p:inputText id="teamFilter" value="#{dashboardBean.teamFilter}"
+									styleClass="filtertext"
+									placeholder="#{msg['dashboard.filterPlaceholder']}">
+									<p:ajax event="blur" listener="#{dashboardBean.filterTeams}"
+										update="availableTeams" />
+								</p:inputText>
+
+
+							</f:facet>
+
+							<p:panel id="pnlTeam" styleClass="entity-container">
+
+								<f:facet name="header">
+
+									<p:commandButton update="teamForm:teamDetail"
+										oncomplete="PF('teamDialog').show()"
+										title="#{msg['dashboard.dialogTitle']}"
+										icon="ui-icon ui-icon-search"
+										styleClass="customBtn no-border-button"
+										id="individualFooterTeam">
+										<f:setPropertyActionListener value="#{team}"
+											target="#{dashboardBean.selectedTeam}" />
+									</p:commandButton>
+
+
+
+									<h:outputText value="#{team.name}"></h:outputText>
+
+								</f:facet>
+
+								<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+
+									<h:outputText styleClass="userLabels"
+										value="#{msg['dashboard.name']}:" />
+									<h:outputText styleClass="userValues" value="#{team.name}" />
+
+									<h:outputText styleClass="userLabels"
+										value="#{msg['dashboard.agency']}:" />
+									<h:outputText styleClass="userValues"
+										value="#{team.project.agency.city}" />
+
+									<h:outputText styleClass="userLabels"
+										value="#{msg['dashboard.project']}:" />
+									<h:outputText styleClass="userValues"
+										value="#{team.project.name}" />
+
+								</p:panelGrid>
+
+
+							</p:panel>
+
+
+
+							<p:draggable for="pnlTeam" revert="true"
+								handle=".ui-panel-titlebar" stack=".ui-panel" zindex="5"
+								scope="team" />
+
+						</p:dataGrid>
+
+						<p:outputPanel layout="block"
+							styleClass="col-lg-offset-1 col-lg-3">
+
+							<p:fieldset id="chosenTeam"
+								legend="#{msg['dashboard.selectedTeam']}"
+								styleClass="chosenBox legend">
+								<p:outputPanel id="dropAreaTeams">
+									<h:outputText value="#{msg['dashboard.dropRecommendation']}"
+										rendered="#{dashboardBean.chosenTeam eq null}"
+										styleClass="chosenText" />
+									<h:panelGrid columns="2" styleClass="chosenPanel"
+										id="chosenTeamTable" value="#{dashboardBean.chosenTeam}"
+										rendered="#{dashboardBean.chosenTeam ne null}">
+
+										<h:outputText value="#{msg['dashboard.name']}:" />
+										<h:outputText styleClass="userValues"
+											value="#{dashboardBean.chosenTeam.name}" />
+
+										<h:outputText value="#{msg['dashboard.agency']}:" />
+										<h:outputText styleClass="userValues"
+											value="#{dashboardBean.chosenTeam.project.agency.city}" />
+
+										<h:outputText value="#{msg['dashboard.project']}:" />
+										<h:outputText styleClass="userValues"
+											value="#{dashboardBean.chosenTeam.project.name}" />
+
+									</h:panelGrid>
+								</p:outputPanel>
+							</p:fieldset>
+
+							<p:inputTextarea id="reasonTeam" styleClass="reason" rows="3"
+								cols="20" counter="counterTeam" maxlength="256"
+								counterTemplate="{0} #{msg['dashboard.charactersRemaining']}"
+								autoResize="true" />
+							<p:watermark for="reasonTeam" value="#{msg['dashboard.reason']}"
+								id="watermarkTeam" />
+							<h:outputText id="counterTeam" />
+
+							<p:commandButton styleClass="submit customBtn"
+								value="#{msg['dashboard.confirm']}"
+								action="#{dashboardBean.saveTeam}"
+								update="growlmsg2 welcomeForm" ajax="true" />
+						</p:outputPanel>
+
+						<p:droppable for="chosenTeam" tolerance="touch"
+							activeStyleClass="ui-state-highlight" datasource="availableTeams"
+							onDrop="handleDrop" scope="team">
+							<p:ajax listener="#{dashboardBean.onTeamDrop}"
+								update="dropAreaTeams availableTeams" />
+						</p:droppable>
+					</p:outputPanel>
+
+					<p:dialog header="#{msg['dashboard.teamDialogTitle']}"
+						widgetVar="teamDialog" modal="true" showEffect="fade"
+						hideEffect="fade" resizable="false">
+						<p:outputPanel id="teamDetail" styleClass="teamDialog">
+							<p:panelGrid columns="2"
+								rendered="#{dashboardBean.selectedTeam ne null}">
+
+								<h:outputText value="#{msg['dashboard.projectDescription']}:" />
+								<h:outputText
+									value="#{dashboardBean.selectedTeam.project.description}" />
+
+								<h:outputText value="#{msg['dashboard.teamMembers']}:" />
+								<ui:repeat var="member"
+									value="#{dashboardBean.selectedTeam.members}"
+									varStatus="status">
+									<h:outputText value=" #{member.lastName} #{member.firstName}" />
+									<br />
+								</ui:repeat>
+
+							</p:panelGrid>
+						</p:outputPanel>
+					</p:dialog>
+
+				</h:form>
+
+			</p:outputPanel>
+
+			<p:outputPanel rendered="#{dashboardBean.isVotingPeriod()}"
+				layout="block" styleClass="vote">
+
+				<h:form id="userFormVote"
+					rendered="#{dashboardBean.existsUserCandidates()}">
+
+
+
+					<p:outputPanel layout="block" styleClass="row ">
+
+						<p:dataGrid var="cand" value="#{dashboardBean.candidates}"
+							columns="3" layout="grid" rows="3" paginator="true"
+							id="availableUsersVote" lazy="true" paginatorPosition="bottom"
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="3,6,12"
+							styleClass="userCarousel col-lg-8 entity-container-header">
+
+							<f:facet name="header">
+								<span><h:outputText
+										value="#{msg['dashboard.candidatesListTitle']}" /></span>
+
+								<p:inputText id="userFilterVote"
+									value="#{dashboardBean.userVoteFilter}" styleClass="filtertext"
+									placeholder="#{msg['dashboard.filterPlaceholder']}">
+									<p:ajax event="blur"
+										listener="#{dashboardBean.filterCandidates}"
+										update="availableUsersVote" />
+								</p:inputText>
+
+							</f:facet>
+
+							<p:panel id="pnlUserVote" styleClass="entity-container">
+
+								<f:facet name="header">
+
+									<p:commandButton update="userFormVote:userDetailVote"
+										id="individualFooterUserVote"
+										oncomplete="PF('userDialogVote').show()"
+										title="#{msg['dashboard.dialogTitle']}"
+										icon="ui-icon ui-icon-search"
+										styleClass="customBtn no-border-button">
+										<f:setPropertyActionListener value="#{cand}"
+											target="#{dashboardBean.selectedCandidate}" />
+									</p:commandButton>
+									<h:outputText
+										value="#{cand.candUser.title} #{cand.candUser.lastName} #{cand.candUser.firstName}"></h:outputText>
+
+								</f:facet>
+								<p:outputPanel layout="block" styleClass="left">
+									<h:outputText styleClass="userLabels"
+										value="#{msg['dashboard.agency']}:" />
+									<br />
+									<h:outputText styleClass="userValues"
+										value="#{cand.candUser.agency.city}" />
+									<h:outputText styleClass="userLabels"
+										value="#{msg['dashboard.position']}:" />
+									<br />
+									<h:outputText styleClass="userValues"
+										value="#{cand.candUser.position.code}" />
+
+								</p:outputPanel>
+
+								<p:outputPanel layout="block">
+									<img class="gridImage"
+										src="data:#{cand.candUser.picture.typeOfImage};base64,#{cand.candUser.picture.base64Image}" />
+								</p:outputPanel>
+								<div class="clear"></div>
+							</p:panel>
+
+
+
+							<p:draggable for="pnlUserVote" revert="true"
+								handle=".ui-panel-titlebar" stack=".ui-panel" zindex="5"
+								scope="userVote" />
+
+						</p:dataGrid>
+
+						<p:outputPanel layout="block"
+							styleClass="col-lg-offset-1 col-lg-3">
+
+							<p:fieldset id="chosenUserVote"
+								legend="#{msg['dashboard.selectedCandidate']}"
+								styleClass="chosenBox legend">
+								<p:outputPanel id="dropAreaUsersVote">
+									<h:outputText value="#{msg['dashboard.dropVote']}"
+										rendered="#{dashboardBean.chosenCandidate eq null}"
+										styleClass="chosenText" />
+									<h:panelGrid columns="2" styleClass="chosenPanel"
+										id="chosenUserTableVote"
+										value="#{dashboardBean.chosenCandidate}"
+										rendered="#{dashboardBean.chosenCandidate ne null}">
+										<h:outputText value="#{msg['dashboard.title']}:" />
+										<h:outputText styleClass="userValues"
+											value="#{dashboardBean.chosenCandidate.candUser.title}" />
+
+										<h:outputText value="#{msg['dashboard.firstName']}:" />
+										<h:outputText styleClass="userValues"
+											value="#{dashboardBean.chosenCandidate.candUser.firstName}" />
+
+										<h:outputText value="#{msg['dashboard.lastName']}:" />
+										<h:outputText styleClass="userValues"
+											value="#{dashboardBean.chosenCandidate.candUser.lastName}" />
+
+										<h:outputText value="#{msg['dashboard.agency']}:" />
+										<h:outputText styleClass="userValues"
+											value="#{dashboardBean.chosenCandidate.candUser.agency.city}" />
+
+										<h:outputText value="#{msg['dashboard.position']}:" />
+										<h:outputText styleClass="userValues"
+											value="#{dashboardBean.chosenCandidate.candUser.position.code}" />
+
+									</h:panelGrid>
+								</p:outputPanel>
+							</p:fieldset>
+
+							<p:commandButton styleClass="submit customBtn"
+								value="#{msg['dashboard.confirm']}"
+								action="#{dashboardBean.saveVote}"
+								update="growlmsg2 welcomeForm" ajax="true" />
+
+						</p:outputPanel>
+
+						<p:droppable for="chosenUserVote" tolerance="touch"
+							activeStyleClass="ui-state-highlight"
+							datasource="availableUsersVote" onDrop="handleDrop"
+							scope="userVote">
+							<p:ajax listener="#{dashboardBean.onCandDrop}"
+								update="dropAreaUsersVote availableUsersVote" />
+						</p:droppable>
+					</p:outputPanel>
+
+					<p:dialog header="#{msg['dashboard.candidateDialogTitle']}"
+						widgetVar="userDialogVote" modal="true" showEffect="fade"
+						hideEffect="fade" resizable="false">
+						<p:outputPanel id="userDetailVote" styleClass="userDialog">
+							<p:panelGrid columns="2"
+								rendered="#{dashboardBean.selectedCandidate ne null}">
+								<f:facet name="header">
+									<img class="dialogImage"
+										src="data:#{cdashboardBean.selectedCandidate.candUser.picture.typeOfImage};base64,#{dashboardBean.selectedCandidate.candUser.picture.base64Image}" />
+								</f:facet>
+
+								<h:outputText value="#{msg['dashboard.title']}:" />
+								<h:outputText
+									value="#{dashboardBean.selectedCandidate.candUser.title}" />
+
+								<h:outputText value="#{msg['dashboard.firstName']}:" />
+								<h:outputText
+									value="#{dashboardBean.selectedCandidate.candUser.firstName}" />
+
+								<h:outputText value="#{msg['dashboard.lastName']}:" />
+								<h:outputText
+									value="#{dashboardBean.selectedCandidate.candUser.lastName}" />
+
+								<h:outputText value="#{msg['dashboard.agency']}:" />
+								<h:outputText
+									value="#{dashboardBean.selectedCandidate.candUser.agency.city}" />
+
+								<h:outputText value="#{msg['dashboard.position']}:" />
+								<h:outputText
+									value="#{dashboardBean.selectedCandidate.candUser.position.code}" />
+							</p:panelGrid>
+						</p:outputPanel>
+					</p:dialog>
+
+
+
+				</h:form>
+
+				<h:form id="teamFormVote"
+					rendered="#{dashboardBean.existsTeamCandidates()}">
+
+
+
+
+					<p:outputPanel layout="block" styleClass="row">
+
+						<p:dataGrid var="teamCand" value="#{dashboardBean.teamCandidates}"
+							columns="4" layout="grid" rows="4" paginator="true"
+							id="availableTeamsVote" lazy="true" paginatorPosition="bottom"
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="4,6,12"
+							styleClass="userCarousel col-lg-8 entity-container-header">
+
+							<f:facet name="header">
+								<span><h:outputText
+										value="#{msg['dashboard.teamCandidatesListTitle']}" /></span>
+
+
+
+								<p:inputText id="teamFilterVote"
+									value="#{dashboardBean.teamVoteFilter}" styleClass="filtertext"
+									placeholder="#{msg['dashboard.filterPlaceholder']}">
+									<p:ajax event="blur"
+										listener="#{dashboardBean.filterTeamCandidates}"
+										update="availableTeamsVote" />
+								</p:inputText>
+
+
+							</f:facet>
+
+							<p:panel id="pnlTeamVote" styleClass="entity-container">
+
+								<f:facet name="header">
+
+									<p:commandButton update="teamFormVote:teamDetailVote"
+										id="individualFooterTeamVote"
+										styleClass="customBtn no-border-button"
+										oncomplete="PF('teamDialogVote').show()"
+										title="#{msg['dashboard.dialogTitle']}"
+										icon="ui-icon ui-icon-search">
+										<f:setPropertyActionListener value="#{teamCand}"
+											target="#{dashboardBean.selectedTeamCandidate}" />
+									</p:commandButton>
+									<h:outputText value="#{teamCand.candTeam.name}"></h:outputText>
+
+								</f:facet>
+								<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+
+									<h:outputText styleClass="userLabels"
+										value="#{msg['dashboard.name']}:" />
+									<h:outputText styleClass="userValues"
+										value="#{teamCand.candTeam.name}" />
+
+									<h:outputText styleClass="userLabels"
+										value="#{msg['dashboard.agency']}:" />
+									<h:outputText styleClass="userValues"
+										value="#{teamCand.candTeam.project.agency.city}" />
+
+									<h:outputText styleClass="userLabels"
+										value="#{msg['dashboard.project']}:" />
+									<h:outputText styleClass="userValues"
+										value="#{teamCand.candTeam.project.name}" />
+
+								</p:panelGrid>
+
+
+							</p:panel>
+
+							
+
+							<p:draggable for="pnlTeamVote" revert="true"
+								handle=".ui-panel-titlebar" stack=".ui-panel" zindex="5"
+								scope="teamVote" />
+
+						</p:dataGrid>
+
+						<p:outputPanel layout="block"
+							styleClass="col-lg-offset-1 col-lg-3">
+
+							<p:fieldset id="chosenTeamVote"
+								legend="#{msg['dashboard.selectedTeamCandidate']}"
+								styleClass="chosenBox legend">
+								<p:outputPanel id="dropAreaTeamsVote">
+									<h:outputText value="#{msg['dashboard.dropVote']}"
+										rendered="#{dashboardBean.chosenTeamCandidate eq null}"
+										styleClass="chosenText" />
+									<h:panelGrid columns="2" styleClass="chosenPanel"
+										id="chosenTeamTableVote"
+										value="#{dashboardBean.chosenTeamCandidate}"
+										rendered="#{dashboardBean.chosenTeamCandidate ne null}">
+
+										<h:outputText value="#{msg['dashboard.name']}:" />
+										<h:outputText styleClass="userValues"
+											value="#{dashboardBean.chosenTeamCandidate.candTeam.name}" />
+
+										<h:outputText value="#{msg['dashboard.agency']}:" />
+										<h:outputText styleClass="userValues"
+											value="#{dashboardBean.chosenTeamCandidate.candTeam.project.agency.city}" />
+
+										<h:outputText value="#{msg['dashboard.project']}:" />
+										<h:outputText styleClass="userValues"
+											value="#{dashboardBean.chosenTeamCandidate.candTeam.project.name}" />
+
+									</h:panelGrid>
+								</p:outputPanel>
+							</p:fieldset>
+
+							<p:commandButton styleClass="submitTC customBtn"
+								value="#{msg['dashboard.confirm']}"
+								action="#{dashboardBean.saveTeamVote}"
+								update="growlmsg2 welcomeForm" ajax="true" />
+						</p:outputPanel>
+
+						<p:droppable for="chosenTeamVote" tolerance="touch"
+							activeStyleClass="ui-state-highlight"
+							datasource="availableTeamsVote" onDrop="handleDrop"
+							scope="teamVote">
+							<p:ajax listener="#{dashboardBean.onTeamCandDrop}"
+								update="dropAreaTeamsVote availableTeamsVote" />
+						</p:droppable>
+					</p:outputPanel>
+
+					<p:dialog header="#{msg['dashboard.teamCandidateDialogTitle']}"
+						widgetVar="teamDialogVote" modal="true" showEffect="fade"
+						hideEffect="fade" resizable="false">
+						<p:outputPanel id="teamDetailVote" styleClass="teamDialog">
+							<p:panelGrid columns="2"
+								rendered="#{dashboardBean.selectedTeamCandidate ne null}">
+
+								<h:outputText value="#{msg['dashboard.projectDescription']}:" />
+								<h:outputText
+									value="#{dashboardBean.selectedTeamCandidate.candTeam.project.description}" />
+
+								<h:outputText value="#{msg['dashboard.teamMembers']}:" />
+								<ui:repeat var="member"
+									value="#{dashboardBean.selectedTeamCandidate.candTeam.members}"
+									varStatus="status">
+									<h:outputText value=" #{member.lastName} #{member.firstName}" />
+									<br />
+								</ui:repeat>
+
+							</p:panelGrid>
+						</p:outputPanel>
+					</p:dialog>
+
+				</h:form>
+			</p:outputPanel>
+
+			<script type="text/javascript">
+				function handleDrop(event, ui) {
+					var dropped = ui.draggable;
+
+					dropped.fadeOut('fast');
+				}
+			</script>
+
+		</ui:define>
+
+	</ui:composition>
+</h:body>
+</html>

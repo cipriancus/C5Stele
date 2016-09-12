@@ -1,0 +1,189 @@
+@CHARSET "ISO-8859-1";
+
+.mainWrapper {
+	margin-left: 10%;
+	margin-right: 10%;
+	margin-top: 10px;
+	margin-bottom: 100px;
+	font-size: 17px;
+}
+
+.star {
+	width: 80%;
+}
+
+.registerForm {
+	margin-left: 70px;
+	width:100%;
+	overflow-y: auto;
+	height: 100%;
+}
+
+.inputTextField {
+	width: 100%;
+	display: block;
+	box-shadow: none;
+	border: none;
+	border-bottom: 1px solid #666;
+	border-radius: 0;
+	background: none;
+	margin: 5px 0 5px 0;
+	padding-left: 15px;
+	font-size: 14px;
+	color: #666;
+}
+
+.inputTextField:focus {
+	box-shadow: none;
+}
+
+.rightPanel {
+	border-left: 1px solid #666;
+	color: #000;
+	font-weight: normal;
+	padding: 10px 0 0 30px;
+	font-family: Tahoma sans-serif;
+}
+
+.selectOneMenuInput .ui-selectonemenu-label.ui-inputfield.ui-corner-all  {
+	font-weight: normal;
+	box-shadow: none;
+	border:none;
+	border-bottom:1px solid #666;
+	border-radius:0;
+	background: none;
+	padding-left:15px;
+}
+
+.ui-state-default.selectOneMenuInput, .ui-widget-content .ui-state-default.selectOneMenuInput, .ui-widget-header .ui-state-default.selectOneMenuInput {
+	background: transparent;
+	border:none;
+}
+
+.ui-inputfield.selectOneMenuInput, .ui-widget-content .ui-inputfield.selectOneMenuInput, .ui-widget-header .ui-inputfield.selectOneMenuInput, .selectOneMenuInput .ui-state-default {
+	background: transparent;
+}
+
+.ui-selectonemenu .ui-selectonemenu-trigger {
+	border-left: none;
+}
+
+.selectOneMenuInput {
+	display: block;
+	margin: 10px 0 10px 0;
+}
+
+.selectOneMenuInput .ui-selectonemenu-label {
+	font-size: 14px;
+	font-family: Arial, sans-serif;
+	color: #666;
+	opacity: 0.7;
+}
+
+.ui-state-hover {
+	box-shadow:none;
+}
+
+.ui-state-default {
+	box-shadow: none;
+	webkit-box-shadow: none;
+}
+
+.uploadArea {
+	width: 100%;
+	height: 40px;
+	border: 1px solid #666;
+	position: relative;
+	padding-left: 3px;
+}
+
+.uploadArea input {
+	cursor:pointer;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+}
+
+.uploadArea span {
+	color: #666;
+	font-weight: normal;
+	position: absolute;
+	top: 7px;
+	left: 15px;
+	vertical-align: middle;
+	display: inline;
+	cursor: pointer;
+	font-size: 14px;
+	font-family: Arial, sans-serif;
+	opacity: 0.7;
+} 
+
+input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
+	background-color: transparent;
+}
+
+input.ui-inputfield.ui-widget, div.ui-selectonemenu.ui-widget {
+	margin: 10px 0 20px;
+}
+
+.userPassword {
+	display: none;
+}
+
+.accText {
+	display: none;
+	font-size: 150%;
+}
+
+@media screen and (max-width: 991.5px) {
+	
+	.rightPanel {
+		margin-top: 10px;
+		border-left: none;
+		padding-bottom: 20px;
+		border-bottom: 1px solid #666;
+	}
+	.registerForm {
+		margin-left: 0px;
+	}
+	
+	.starPanel {
+		text-align: center;
+		margin-top: 15px;
+		margin-bottom: 10px;
+	}
+}
+
+@media only screen and (max-width : 767.5px) {
+	.rightPanel {
+		padding-top: 0px;
+		margin-top: 0px;
+	}
+	
+	.userpassword, .accText {
+		display:block;
+	}
+	
+	.loginMiddle {
+		margin-top:10px;
+	}
+	
+	.loginRight {
+		margin-top: 10px;
+		text-align: center;
+	}
+	
+	.ui-widget .ui-widget.links {
+		color: black;
+	}
+	
+	.ui-widget .ui-button.btnSub {
+		margin: auto;
+		margin-bottom: 20px;
+	}
+	
+	.alignText {
+		text-align:center;
+		margin-bottom:15px;
+	}
+}

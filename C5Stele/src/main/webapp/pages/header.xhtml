@@ -1,0 +1,139 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+	<p:outputPanel layout="block" styleClass="header row">
+		<p:outputPanel layout="block"
+			styleClass="logo col-lg-4 col-md-4 col-sm-4 col-xs-4">
+			<p:link outcome="#{userMB.home()}">
+				<h:graphicImage name="images/ntt-logo.png" />
+			</p:link>
+
+		</p:outputPanel>
+		
+		<p:outputPanel layout="block"
+			styleClass="titleblock col-lg-4 col-md-4 col-sm-4 col-xs-4">
+			<h:outputText styleClass="title" value="#{msg['template.title']}" />
+			<h:graphicImage styleClass="starTemplate" name="images/golden_star.png" />
+		</p:outputPanel>
+
+		<p:outputPanel layout="block" styleClass="col-xs-4 profileMob"
+			rendered="#{userMB.loggedIn}">
+			<h:form>
+				<h:graphicImage id="profilePicMob"
+					value="data:#{dashboardBean.picture.typeOfImage};base64,#{dashboardBean.picture.base64Image}">
+				</h:graphicImage>
+				<p:overlayPanel for="profilePicMob" dismissable="true" >
+					<p:link styleClass="row" value="#{msg['template.profile']}"
+						outcome="profile.xhtml" />
+					<h:commandLink styleClass="row signout"
+						value="#{msg['template.signOut']}" action="#{loginBean.logout}" />
+				</p:overlayPanel>
+			</h:form>
+
+		</p:outputPanel>
+
+		
+		<p:outputPanel layout="block"
+			styleClass="col-lg-4 col-md-4 col-sm-4 col-xs-4 headerRightPanel">
+			<p:outputPanel layout="block" styleClass="headerRight">
+				<p:outputPanel layout="block" styleClass="row buttons">
+					<p:outputPanel layout="block" styleClass="row userpass"
+						rendered="#{!userMB.loggedIn}">
+						<h:form prependId="false">
+							<p:outputPanel
+								styleClass=" col-lg-4 col-md-4 col-sm-4 col-xs-3 loginLeft">
+								<p:inputText value="#{loginBean.username}" id="username1"
+									placeholder="#{msg['template.username']}" required="true"
+									styleClass=" user inputLoginHeader"
+									requiredMessage="#{msg['template.requiredUser']}" tabindex="1" />
+								<p:link styleClass="links" value="#{msg['template.forgotPass']}"
+									outcome="forgot.xhtml" />
+							</p:outputPanel>
+
+							<p:outputPanel
+								styleClass="col-lg-4 col-md-4 col-sm-4 col-xs-3 loginMiddle">
+								<p:password value="#{loginBean.password}" id="password1"
+									placeholder="#{msg['template.password']}" required="true"
+									styleClass=" pass inputLoginHeader"
+									requiredMessage="#{msg['template.requiredPass']}"
+									maxlength="45" tabindex="2" />
+								<p:link styleClass="links"
+									value="#{msg['template.resendActivation']}"
+									outcome="reactivate.xhtml" />
+							</p:outputPanel>
+
+							<p:outputPanel
+								styleClass="col-lg-1 col-md-2 col-sm-2 col-xs-1 loginRight">
+								<h:commandButton value="#{msg['template.logIn']}"
+									action="#{loginBean.login}"
+									styleClass="customBtn btnSub inputLoginHeader" />
+							</p:outputPanel>
+
+						</h:form>
+					</p:outputPanel>
+
+					<p:outputPanel layout="block" styleClass="row profile"
+						rendered="#{userMB.loggedIn}">
+						<h:graphicImage id="profilePic"
+							value="data:#{dashboardBean.picture.typeOfImage};base64,#{dashboardBean.picture.base64Image}">
+						</h:graphicImage>
+						<p:overlayPanel for="profilePic" dismissable="true">
+							<p:link styleClass="row" value="#{msg['template.profile']}"
+								outcome="profile.xhtml" />
+							<h:form>
+								<h:commandLink id="signOut" styleClass="row signout"
+									value="#{msg['template.signOut']}" action="#{loginBean.logout}" />
+							</h:form>
+						</p:overlayPanel>
+					</p:outputPanel>
+
+					<p:link value="#{msg['template.signIn']}" rendered="false"
+						outcome="signIn.xhtml"
+						styleClass="col-lg-6 col-md-6 col-sm-6 col-xs-6 signin" />
+
+					<p:link value="#{msg['template.register']}"
+						outcome="register.xhtml" rendered="false"
+						styleClass="col-lg-6 col-md-6 col-sm-6 col-xs-6 register" />
+
+				</p:outputPanel>
+			</p:outputPanel>
+		</p:outputPanel>
+	</p:outputPanel>
+
+	<p:outputPanel layout="block" styleClass="helpMenu row">
+		<p:link value="#{msg['template.helpMenu1']}"
+			outcome="#{headerBean.writeOutcome()}"
+			styleClass="#{pageParam eq 'home'? 'highlight':''}" />
+		<p:link value="#{msg['template.helpMenu2']}" outcome="about.xhtml"
+			styleClass="#{pageParam eq 'about'? 'highlight':''}" />
+		<p:link value="#{msg['template.helpMenu3']}" outcome="contact.xhtml"
+			styleClass="#{pageParam eq 'contact'? 'highlight':''}" />
+		<p:link value="#{msg['template.helpMenu4']}" outcome="faq.xhtml"
+			styleClass="#{pageParam eq 'faq'? 'highlight':''}" />
+		<p:link value="#{msg['template.helpMenu5']}" outcome="news.xhtml"
+			styleClass="#{pageParam eq 'news'? 'highlight':''}" />
+	</p:outputPanel>
+
+	<h:outputScript target="head">
+   		$ = jQuery;
+    	
+    	// Then you can use it
+    	$(document).ready(function() {
+								
+			var loginValidation = function (isInError, msg){
+				if (isInError) {
+					$('#j_username').addClass('ui-state-error');
+					$('#j_password').addClass('ui-state-error');
+				}
+			};
+			
+			loginValidation('#{securityErrorMessage}', 'Invalid Credentials');					        
+    	});
+	</h:outputScript>
+
+
+</h:body>
+</html>

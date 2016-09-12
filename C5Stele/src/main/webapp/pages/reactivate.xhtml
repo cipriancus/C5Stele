@@ -1,0 +1,44 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:body>
+	<ui:composition template="template.xhtml">
+
+		<ui:define name="content">
+			<h:outputStylesheet name="css/signIn.css" />
+			<h:form id="form" styleClass="outer">
+
+				<p:outputPanel layout="block" styleClass="middle">
+					<p:panel header="#{msg['reactivate.title']}" modal="true"
+						height="100" styleClass="basic">
+						<p:messages id="messages" globalOnly="true" showDetail="true"
+							autoUpdate="true" closable="true" />
+						<h:outputText value="#{msg['reactivate.message']}" />
+						<p:outputPanel layout="block" id="grid">
+
+							<p:inputText id="email" placeholder="E-mail" required="true"
+								label="email" validatorMessage="Invalid email format"
+								binding="#{emailFieldInput}" styleClass="inputTextField"
+								requiredMessage="Field cannot be empty">
+								<f:validateRegex
+									pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+							</p:inputText>
+							<p:commandButton value="#{msg['reactivate.send']}" update="grid"
+								action="#{registrationBean.reactivate(emailFieldInput.value)}"
+								styleClass="reactivate-btn" />
+
+							<p:message for="email" display="text" />
+
+						</p:outputPanel>
+
+
+					</p:panel>
+				</p:outputPanel>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

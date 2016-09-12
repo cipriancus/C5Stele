@@ -1,0 +1,49 @@
+@CHARSET "ISO-8859-1";
+
+.outer {
+	display: table;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    margin-top: 25px;
+}
+
+.ui-accordion-header.ui-helper-reset {
+	margin-top: 30px;
+}
+
+.ui-accordion .ui-accordion-header {
+	padding-left: .5em;
+}
+
+.ui-accordion .ui-accordion-header .ui-icon {
+	left: auto;
+	right: .5em;
+}
+
+.ui-accordion .ui-state-default, .ui-accordion-content.ui-widget-content .ui-state-default, .ui-accordion-header .ui-state-default {
+	font-weight: normal;
+	box-shadow: none;
+	border:none;
+	border-bottom:1px solid #666;
+	border-radius:0;
+	background: none;
+}
+
+.basic {
+	margin: auto;
+	width: 50%;
+}
+
+.ui-accordion {
+	margin-bottom: 20px;
+}
+
+.ui-accordion .ui-widget-content {
+	background: none;
+}
+
+.ui-accordion .ui-state-default {
+	box-shadow: none;
+	webkit-box-shadow: none;
+}

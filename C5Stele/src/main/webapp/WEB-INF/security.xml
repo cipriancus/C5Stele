@@ -1,0 +1,74 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/security
+	http://www.springframework.org/schema/security/spring-security.xsd">
+
+	
+	<bean id="customAuthenticationHandler" class="com.ntt.data.security.SaveRequestAwareAuthenticationSuccessHandler"> 
+		<property name="defaultTargetUrl" value="/dashboard"></property>
+		<property name="targetUrlParameter" value="redirect"/>
+	</bean>
+	
+	<bean id="customAuthenticationFailureHandler" class="com.ntt.data.security.CustomAuthenticationFailureHandler">
+		<property name="defaultFailureUrl" value="/pages/index.xhtml"></property>
+	</bean>
+	
+	<bean id="encoder"
+		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+		<constructor-arg name="strength" value="11" />
+    </bean>
+	
+	<security:global-method-security secured-annotations="enabled" pre-post-annotations="enabled"/>
+	
+	<!-- enable use-expressions -->
+	<security:http auto-config="true" use-expressions="true" once-per-request="false">
+
+		<security:intercept-url pattern="/pages/index*" access="permitAll" />
+
+		<security:intercept-url pattern="/pages/reset*" access="permitAll" />
+		
+		<security:intercept-url pattern="/pages/faq*" access="permitAll" />
+		
+		<security:intercept-url pattern="/pages/news*" access="permitAll" />
+		
+		<security:intercept-url pattern="/pages/contact*" access="permitAll" />
+		
+		<security:intercept-url pattern="/pages/about*" access="permitAll" />
+		
+		<security:intercept-url pattern="/pages/reactivate*" access="permitAll" />	
+		
+		<security:intercept-url pattern="/pages/reset*" access="permitAll" />
+		
+		<security:intercept-url pattern="/pages/changePassword*" access="permitAll" />	
+		
+		<security:intercept-url pattern="/pages/profile*" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')" />
+
+		<security:intercept-url pattern="/pages/dashboard*" access="hasRole('ROLE_USER')" />
+
+		<security:intercept-url pattern="/pages/admin*" access="hasRole('ROLE_ADMIN')" />
+		
+		<!-- access denied page -->
+		<security:access-denied-handler error-page="/pages/403.xhtml" />
+		
+		<security:form-login login-processing-url="/j_spring_security_check"
+			login-page="/pages/index.xhtml"
+			authentication-failure-url="/pages/index.xhtml"
+			authentication-success-handler-ref="customAuthenticationHandler"
+			authentication-failure-handler-ref="customAuthenticationFailureHandler"
+		/>
+		
+		<security:logout logout-url="/j_spring_security_logout"
+			logout-success-url="/pages/index.xhtml" delete-cookies="jsessionid"
+			invalidate-session="true"
+		/>
+		
+	</security:http>
+
+	<security:authentication-manager alias="authenticationManager">
+		<security:authentication-provider ref="customAuthenticationProvider"/>
+	</security:authentication-manager>
+
+</beans>

@@ -1,0 +1,127 @@
+.outer {
+	display: table;
+	position: absolute;
+	height: 100%;
+	width: 100%;
+}
+
+.middle {
+	display: table-cell;
+}
+
+.basic {
+	margin: auto;
+	width: 30%;
+	border-radius: 0;
+}
+
+.ui-inputfield.ui-inputtext.ui-widget.ui-state-default.ui-corner-all.username
+	{
+	padding-left: 18px;
+	margin-bottom: 10px;
+	background-image: url("../../resources/images/user_icon.png");
+	background-position: 3px 6px;
+	background-repeat: no-repeat;
+}
+
+.ui-inputfield.ui-password.ui-widget.ui-state-default.ui-corner-all.password
+	{
+	padding-left: 18px;
+	margin-bottom: 10px;
+	background-image: url("../../resources/images/lock_icon.png");
+	background-position: 3px 6px;
+	background-repeat: no-repeat;
+}
+
+.user, .pass, .email {
+	width: 40%;
+	margin-top: 10px;
+}
+
+.pass, .email {
+	margin-bottom: 10px;
+}
+
+.btnSubmit {
+	font-size: inherit;
+}
+
+.ui-message.ui-message-error.ui-widget.ui-corner-all {
+	display: inline;
+}
+
+.ui-button {
+	border-radius: 10px;
+}
+
+.links {
+	display: block;
+}
+
+@media only screen and (max-width : 980px) {
+	.basic {
+		width: 50%;
+	}
+}
+
+@media only screen and (max-width : 480px) {
+	.basic {
+		width: 95%;
+	}
+	.ui-widget .ui-widget {
+		font-size: 0.9em;
+	}
+}
+
+@media only screen and (max-width : 320px) {
+	.basic {
+		width: 95%;
+	}
+	.ui-widget .ui-widget {
+		font-size: 0.85em;
+	}
+}
+
+.ui-panel .ui-panel-titlebar {
+	background: none;
+	border: none;
+	border-bottom: 1px solid #666;
+	border-radius: 0
+}
+
+.ui-button.ui-state-default, .ui-widget-content .ui-state-default.ui-button,
+	.ui-widget-header .ui-state-default.ui-button {
+	background: #fff;
+	padding: 3px;
+	margin: 5px;
+	margin-left: 0;
+	border-radius: 0;
+	color: #666;
+	font-size: 14px;
+	font-weight: normal;
+	border: 1px solid #666;
+}
+
+.ui-inputfield.inputTextField {
+	width: 100%;
+	display: block;
+	box-shadow: none;
+	border: none;
+	border-bottom: 1px solid #666;
+	border-radius: 0;
+	background: none;
+	margin: 5px 0 5px 0;
+	padding-left: 15px;
+	font-size: 14px;
+	color: #666;
+}
+
+.ui-inputfield.inputTextField:focus {
+	border: none;
+	box-shadow: none;
+	border-bottom: 1px solid #666;
+}
+
+.ui-button.ui-state-default.reactivate-btn {
+	margin-left: 0;
+}

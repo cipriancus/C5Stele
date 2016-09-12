@@ -1,0 +1,58 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+	<ui:composition template="template.xhtml">
+
+		<ui:define name="header">
+			<ui:param name="pageParam" value="news" />
+			<ui:include src="header.xhtml" />
+		</ui:define>
+
+		<ui:define name="content">
+			<ui:param name="pageParam" value="news" />
+			<h:outputStylesheet name="css/news.css" />
+
+			<h:form id="form" styleClass="outer">
+				<p:growl id="msgs" showDetail="true" />
+				<p:outputPanel layout="block" styleClass="middle">
+					<div class="col-md-12 mainWrapper">
+						<div class="comments-container">
+							<ul id="comments-list" class="comments-list">
+
+								<ui:repeat var="listNews" value="#{newsBean.data}"
+									varStatus="status">
+
+									<li class="col-md-12 comments-list">
+										<div class="comment-main-level">
+											<div class="comment-box">
+												<div class="comment-head">
+													<h6 class="comment-name by-author">
+														<a href=""> <b><h:outputText value="#{listNews.title}"
+																escape="false" /></b></a>
+													</h6>
+
+													<span><h:outputText
+																value="#{listNews.lastModifiedBy}" escape="false" /> at <h:outputText
+															value="#{listNews.lastModifiedAt}" escape="false" /></span>
+												</div>
+
+												<div class="comment-content">
+													<h:outputText value="#{listNews.message}" escape="false" />
+												</div>
+											</div>
+										</div>
+									</li>
+
+								</ui:repeat>
+							</ul>
+						</div>
+					</div>
+				</p:outputPanel>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

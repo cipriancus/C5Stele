@@ -1,0 +1,51 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:body>
+	<ui:composition template="template.xhtml">
+
+		<ui:define name="content">
+			<h:outputStylesheet name="css/signIn.css" />
+			<h:form id="signInForm" styleClass="outer">
+
+				<p:outputPanel layout="block" styleClass="middle">
+
+					<p:panel header="Sign In" modal="true" height="100"
+						styleClass="basic">
+						<p:messages id="messages" globalOnly="true" showDetail="true"
+							autoUpdate="true" closable="true" />
+						<h:outputText value="Please Sign In to use the application" />
+
+						<p:outputPanel layout="block" id="grid">
+
+							<p:inputText id="username" placeholder="Username"
+								value="#{loginBean.username}" required="true" label="username"
+								styleClass="username" requiredMessage="! Field cannot be empty" />
+							<p:message for="username" display="text" />
+
+							<p:password id="password" placeholder="Password"
+								value="#{loginBean.password}" required="true" label="password"
+								styleClass="password" requiredMessage="! Field cannot be empty" />
+							<p:message for="password" display="text" />
+
+						</p:outputPanel>
+
+						<p:outputPanel layout="block">
+							<p:commandButton value="Submit" update="grid"
+								action="#{loginBean.login}" styleClass="btnSubmit" />
+						</p:outputPanel>
+						<p:link  value=" Forgot your password? "
+							outcome="forgot.xhtml" />
+						<p:link  value=" Resend activation mail? "
+							outcome="reactivate.xhtml" />
+
+					</p:panel>
+				</p:outputPanel>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

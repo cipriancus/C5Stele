@@ -1,0 +1,63 @@
+.outer {
+	display: table;
+	position: absolute;
+	height: 100%;
+	width: 100%;
+}
+
+.middle {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.basic {
+	margin: auto;
+	width: 30%;
+}
+
+.ui-inputfield.ui-password.ui-widget.ui-state-default.ui-corner-all.password
+	{
+	padding-left: 18px;
+	background-image: url("../../resources/images/lock_icon.png");
+	background-position: 3px 6px;
+	background-repeat: no-repeat;
+}
+
+.password {
+	display: block; width : 40%;
+	margin: 20px;
+	width: 40%;
+}
+
+.password {
+	display: block;
+	margin: 20px;
+}
+
+.btnSubmit {
+	font-size: inherit;
+}
+
+@media only screen and (max-width : 980px) {
+	.basic {
+		width: 50%;
+	}
+}
+
+@media only screen and (max-width : 480px) {
+	.basic {
+		width: 95%;
+	}
+	.ui-widget .ui-widget {
+		font-size: 0.9em;
+	}
+}
+
+@media only screen and (max-width : 320px) {
+	.basic {
+		width: 95%;
+	}
+	.ui-widget .ui-widget {
+		font-size: 0.85em;
+	}
+}

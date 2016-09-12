@@ -1,0 +1,165 @@
+CREATE TABLE `agencies` (
+  `ID` int(11) NOT NULL,
+  `CITY` varchar(45) DEFAULT NULL,
+  `COUNTRIES_ID` int(11) DEFAULT NULL,
+  `LAST_MODIFIED_AT` date DEFAULT NULL,
+  `LAST_MODIFIED_BY` varchar(45) DEFAULT NULL
+) /;
+
+CREATE TABLE `candidates` (
+  `ID` int(11) NOT NULL,
+  `PERIOD_ID` int(11) DEFAULT NULL,
+  `PROPOSED_BY_USER_ID` int(11) DEFAULT NULL,
+  `SELECTED_USER_ID` int(11) DEFAULT NULL,
+  `DATE` date DEFAULT NULL,
+  `ACTIVE` tinyint(1) DEFAULT NULL,
+  `LAST_MODIFIED_AT` date DEFAULT NULL,
+  `LAST_MODIFIED_BY` varchar(45) DEFAULT NULL,
+  `REASONS` varchar(255) DEFAULT NULL
+) /;
+
+CREATE TABLE `countries` (
+  `ID` int(11) NOT NULL,
+  `NAME` varchar(45) NOT NULL,
+  `LANGUAGE` varchar(45) DEFAULT NULL,
+  `LAST_MODIFIED_AT` date DEFAULT NULL,
+  `LAST_MODIFIED_BY` varchar(45) DEFAULT NULL,
+  `LANGUAGE_ID` varchar(5) DEFAULT NULL
+  ) /;
+
+CREATE TABLE `departments` (
+  `ID` int(11) NOT NULL,
+  `CODE` varchar(45) NOT NULL,
+  `DESCRIPTION` varchar(255) DEFAULT NULL,
+  `LAST_MODIFIED_AT` date DEFAULT NULL,
+  `LAST_MODIFIED_BY` varchar(45) DEFAULT NULL,
+  `CODE_MSG_ID` varchar(5) DEFAULT NULL
+  ) /;
+  
+CREATE TABLE `faq` (
+  `ID` int(11) NOT NULL,
+  `QUESTION` varchar(255) DEFAULT NULL,
+  `ANSWER` varchar(255) DEFAULT NULL,
+  `ORDER_OF_QUESTIONS` int(11) DEFAULT NULL
+  ) /;
+
+CREATE TABLE `languages` (
+  `CODE` varchar(5) NOT NULL,
+  `NAME` varchar(10) DEFAULT NULL
+  ) /;
+
+CREATE TABLE `messages` (
+  `CODE` varchar(5) NOT NULL,
+  `MESSAGE` varchar(1000) DEFAULT NULL,
+  `CODE_LNG_ID` varchar(5) DEFAULT NULL
+  ) /;
+
+CREATE TABLE `periods` (
+  `ID` int(11) NOT NULL,
+  `LAST_RECOMMENDATION_DAY` date DEFAULT NULL,
+  `LAST_VOTING_DAY` date DEFAULT NULL,
+  `ACTIVE` tinyint(1) DEFAULT NULL,
+  `COUNTRIES_ID` int(11) DEFAULT NULL,
+  `LAST_MODIFIED_AT` date DEFAULT NULL,
+  `LAST_MODIFIED_BY` varchar(45) DEFAULT NULL
+  ) /;
+
+CREATE TABLE `pictures` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `IMAGE` blob,
+  `LAST_MODIFIED_AT` date DEFAULT NULL,
+  `LAST_MODIFIED_BY` varchar(45) DEFAULT NULL
+  ) /;
+
+CREATE TABLE `positions` (
+  `ID` int(11) NOT NULL,
+  `CODE` varchar(45) NOT NULL,
+  `DESCRIPTION` varchar(255) DEFAULT NULL,
+  `DEPARTMENTS_ID` int(11) DEFAULT NULL,
+  `CODE_MESSAGE_ID` varchar(5) DEFAULT NULL,
+  `LAST_MODIFIED_AT` date DEFAULT NULL,
+  `LAST_MODIFIED_BY` varchar(45) DEFAULT NULL
+  ) /;
+
+CREATE TABLE `projects` (
+  `ID` int(11) NOT NULL,
+  `DESCRIPTION` varchar(255) DEFAULT NULL,
+  `AGENCIES_ID` int(11) DEFAULT NULL
+  ) /;
+
+CREATE TABLE `roles` (
+  `ID` int(11) NOT NULL,
+  `ROLE_TYPE` varchar(45) DEFAULT NULL,
+  `DESCRIPTION` varchar(255) DEFAULT NULL,
+  `LAST_MODIFIED_AT` date DEFAULT NULL,
+  `LAST_MODIFIED_BY` varchar(45) DEFAULT NULL
+  ) /;
+
+CREATE TABLE `schema_history` (
+  `version_rank` int(11) NOT NULL,
+  `installed_rank` int(11) NOT NULL,
+  `version` varchar(50) NOT NULL,
+  `description` varchar(200) NOT NULL,
+  `type` varchar(20) NOT NULL,
+  `script` varchar(1000) NOT NULL,
+  `checksum` int(11) DEFAULT NULL,
+  `installed_by` varchar(100) NOT NULL,
+  `installed_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `execution_time` int(11) NOT NULL,
+  `success` tinyint(1) NOT NULL
+  ) /;
+
+CREATE TABLE `team_candidates` (
+  `ID` int(11) NOT NULL,
+  `PERIOD_ID` int(11) DEFAULT NULL,
+  `TEAMS_PROPOSED_BY_USER_ID` int(11) DEFAULT NULL,
+  `SELECTED_TEAMS_ID` int(11) DEFAULT NULL,
+  `REASONS` varchar(255) DEFAULT NULL,
+  `DATE` date DEFAULT NULL,
+  `ACTIVE` tinyint(1) DEFAULT NULL,
+  `LAST_MODIFIED_AT` date DEFAULT NULL,
+  `LAST_MODIFIED_BY` varchar(45) DEFAULT NULL
+  ) /;
+
+CREATE TABLE `team_votes` (
+  `ID` int(11) NOT NULL,
+  `USERS_ID` int(11) DEFAULT NULL,
+  `TEAM_CANDIDATES_ID` int(11) DEFAULT NULL,
+  `ACTIVE` tinyint(1) DEFAULT NULL,
+  `LAST_MODIFIED_AT` date DEFAULT NULL,
+  `LAST_MODIFIED_BY` varchar(45) DEFAULT NULL
+  ) /;
+
+CREATE TABLE `teams` (
+  `ID` int(11) NOT NULL,
+  `TEAM_NAME` varchar(45) DEFAULT NULL,
+  `PROJECTS_ID` int(11) DEFAULT NULL
+  ) /;
+
+CREATE TABLE `users` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `FIRST_NAME` varchar(255) NOT NULL,
+  `LAST_NAME` varchar(255) NOT NULL,
+  `TITLE` varchar(45) DEFAULT NULL,
+  `PHONE_NUMBER` varchar(45) DEFAULT NULL,
+  `EMAIL` varchar(45) NOT NULL,
+  `USERNAME` varchar(45) NOT NULL,
+  `PASSWORD` varchar(45) NOT NULL,
+  `ACTIVE` tinyint(1) DEFAULT NULL,
+  `PICTURES_ID` int(11) DEFAULT NULL,
+  `ROLES_ID` int(11) DEFAULT NULL,
+  `AGENCIES_ID` int(11) DEFAULT NULL,
+  `POSITIONS_ID` int(11) DEFAULT NULL,
+  `LAST_MODIFIED_AT` date DEFAULT NULL,
+  `LAST_MODIFIED_BY` varchar(45) DEFAULT NULL,
+  `TEAMS_ID` int(11) DEFAULT NULL
+  ) /;
+
+CREATE TABLE `votes` (
+  `ID` int(11) NOT NULL,
+  `USERS_ID` int(11) DEFAULT NULL,
+  `CANDIDATES_ID` int(11) DEFAULT NULL,
+  `ACTIVE` tinyint(1) DEFAULT NULL,
+  `LAST_MODIFIED_AT` date DEFAULT NULL,
+  `LAST_MODIFIED_BY` varchar(45) DEFAULT NULL
+  ) /;

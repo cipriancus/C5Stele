@@ -1,0 +1,9 @@
+Buna $user,
+
+  Multumim pentru inregistrare ! Urmatorul pas este de a activa contul, pentru a-l activa va rugam sa intrati pe link-ul urmator:
+  
+  http://localhost:8080/C5Stele/activation?activationcode=$uid
+  
+  Multumim,
+  C5Stele
+

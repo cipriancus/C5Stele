@@ -1,0 +1,94 @@
+#mainWrapper {
+	margin-left: 10%;
+	margin-right: 10%;
+	margin-top: 2%;
+	margin-bottom: 100px;
+	font-size:17px;
+	
+}
+
+#leftPanel {
+	padding: 10px 30px 0;
+}
+
+#rightPanel {
+	border-left: 1px solid #666;
+	color: #000;
+	font-weight: normal;
+	padding:10px 0 0 30px;
+	font-family: Tahoma sans-serif;
+}
+
+@media screen and (max-width: 992px){
+	#rightPanel {
+		margin-top:50px;
+		border-left: none;
+		border-top: 1px solid #666;
+	}
+}
+
+.ui-widget .submitContactButton {
+	background: #fff;
+	padding: 3px;
+	margin-top:10px;
+	border-radius:0;
+	color:#666;
+	font-size:14px;
+	font-weight:normal;
+	border:1px solid #666;
+}
+
+.submitContactButton:hover {
+	background: #ccc;
+	text-decoration: none;
+	
+}
+
+.infos {
+	margin-left: 10px;
+	font-size: 14px;
+	color:#666;
+}
+
+.infoTitle{
+	font-size: 14px;
+	color:#666;
+}
+
+.ui-messages-error, .ui-message-error {
+	display: inline;
+}
+
+.ui-widget .inputContact{
+	width:100%;
+	box-shadow: none;
+	border:none;
+	border-bottom:1px solid #666;
+	border-radius:0;
+	background: none;
+	padding-left:15px;
+	font-size:14px;
+	color:#666;
+	
+}
+
+.inputContact:focus{
+	box-shadow:none;
+}
+
+#contactForm{
+	color: #000;
+	
+}
+
+.mandatoryFields{
+	display:block;
+	font-size:12px;
+	color:#666;
+	margin-top: 20px;
+}
+
+.formRow{
+	margin-bottom: 20px;
+}
+

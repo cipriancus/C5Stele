@@ -1,0 +1,41 @@
+<pretty-config xmlns="http://ocpsoft.org/schema/rewrite-config-prettyfaces" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xsi:schemaLocation="http://ocpsoft.org/schema/rewrite-config-prettyfaces
+                      http://ocpsoft.org/xml/ns/prettyfaces/rewrite-config-prettyfaces.xsd">
+
+	<!-- <url-mapping id="homepage">
+		<pattern value="/homepage" />
+		<view-id value="/pages/index.xhtml" />
+	</url-mapping> -->
+	
+	<!-- <url-mapping id="admin">
+		<pattern value="/admin" />
+		<view-id value="/pages/admin.xhtml" />
+	</url-mapping> -->
+	
+	<url-mapping id="contact">
+		<pattern value="/contact" />
+		<view-id value="/pages/contact.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="about">
+		<pattern value="/about" />
+		<view-id value="/pages/about.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="faq">
+		<pattern value="/faq" />
+		<view-id value="/pages/faq.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="news">
+		<pattern value="/news" />
+		<view-id value="/pages/news.xhtml" />
+	</url-mapping>
+	
+	<!-- <url-mapping id="dashboard">
+		<pattern value="/dashboard" />
+		<view-id value="/pages/dashboard.xhtml" />
+	</url-mapping>
+ -->
+</pretty-config>

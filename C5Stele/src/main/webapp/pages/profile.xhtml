@@ -1,0 +1,151 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:body>
+	<ui:composition template="template.xhtml">
+
+		<ui:define name="content">
+			<h:outputStylesheet name="css/profile.css" />
+			<p:outputPanel layout="block">
+
+				<p:outputPanel layout="block">
+
+					<p:outputPanel layout="block"
+						styleClass="col-md-6 col-xs-12 col-sm-12 leftPanel ">
+						<p:outputPanel id="picturePanel">
+							<h:graphicImage id="picture" styleClass="picture"
+								value="data:#{profileBean.fileUploadManagedBean.typeOfImage};base64,#{profileBean.fileUploadManagedBean.imageContentsAsBase64}" />
+						</p:outputPanel>
+
+						<h:form id="picForm" enctype="multipart/form-data"
+							styleClass="picForm">
+
+							<p:fileUpload value="#{profileBean.fileUploadManagedBean.file}"
+								immediate="true" mode="advanced"
+								fileUploadListener="#{profileBean.savePic}"
+								allowTypes="/(\.|\/)(gif|jpe?g|png)$/" sizeLimit="2000000"
+								update="picturePanel"
+								invalidSizeMessage="#{msg['homepage.invalidFileSize']}"
+								invalidFileMessage="#{msg['homepage.invalidFileType']}">
+
+							</p:fileUpload>
+						</h:form>
+					</p:outputPanel>
+
+					<p:outputPanel layout="block"
+						styleClass="col-md-6 col-xs-12 col-sm-12 rightPanel">
+						<h:form>
+
+							<p:messages id="picmessages" globalOnly="true" showDetail="true"
+								autoUpdate="true" />
+
+							<h:panelGrid columns="2" styleClass="grid" cellpadding="5"
+								id="picgrid">
+								<p:outputLabel for="pwd1"
+									value="#{msg['profile.changePassword']}" />
+								<p:password id="pwd1" value="#{profileBean.newPassword}"
+									match="pwd2" feedback="true" required="true"
+									requiredMessage="#{msg['profile.requiredPassword']}"
+									maxlength="45" styleClass="placeholder"
+									validatorMessage="#{msg['profile.validatePassword']}" />
+
+								<p:outputLabel for="pwd2"
+									value="#{msg['profile.repeatPassword']}" />
+								<p:password id="pwd2" value="#{profileBean.newPassword}"
+									required="true"
+									requiredMessage="#{msg['profile.requiredRepeatPassword']}"
+									styleClass="placeholder" />
+
+								<p:outputLabel for="pwd"
+									value="#{msg['profile.currentPassword']}" />
+								<p:password id="pwd" value="#{profileBean.oldPassword}"
+									required="true"
+									requiredMessage="#{msg['profile.requiredCurrentPassword']}"
+									maxlength="45" styleClass="placeholder" />
+							</h:panelGrid>
+
+							<p:commandButton value="#{msg['profile.save']}"
+								action="#{profileBean.savePass}" update="picgrid"
+								styleClass="savebtn customBtn"  />
+						</h:form>
+
+						<h:form prependId="false">
+
+							<h:panelGrid columns="2" styleClass="grid" cellpadding="5"
+								id="grid">
+
+								<p:outputLabel for="firstName"
+									value="#{msg['profile.firstName']}" />
+								<p:inputText id="firstName"
+									value="#{profileBean.user.firstName}" required="true"
+									requiredMessage="#{msg['homepage.requiredFirstName']}"
+									maxlength="255" styleClass="placeholder"
+									validatorMessage="#{msg['homepage.validateFirstName']}">
+									<f:validateRegex pattern="^[a-zA-ZäöüßÄÖÜ\-]+$" />
+								</p:inputText>
+
+
+								<p:outputLabel for="lastName" value="#{msg['profile.lastName']}" />
+								<p:inputText id="lastName" value="#{profileBean.user.lastName}"
+									required="true"
+									requiredMessage="#{msg['homepage.requiredLastName']}"
+									maxlength="255" styleClass="placeholder"
+									validatorMessage="#{msg['homepage.validateLastName']}">
+									<f:validateRegex pattern="^[a-zA-ZäöüßÄÖÜ\-]+$" />
+								</p:inputText>
+
+								<p:outputLabel for="title" value="#{msg['profile.title']}" />
+								<p:selectOneMenu id="title" value="#{profileBean.user.title}"
+									styleClass="dropmenu" required="true"
+									requiredMessage="#{msg['homepage.requiredTitle']} ">
+									<f:selectItem itemLabel="Mr" itemValue="Mr" />
+									<f:selectItem itemLabel="Ms" itemValue="Ms" />
+									<f:selectItem itemLabel="Mrs" itemValue="Mrs" />
+								</p:selectOneMenu>
+
+								<p:outputLabel for="phoneNumber"
+									value="#{msg['profile.phoneNumber']}" />
+								<p:inputText id="phoneNumber"
+									value="#{profileBean.user.phoneNumber}" maxlength="45"
+									styleClass="placeholder"
+									validatorMessage="#{msg['homepage.validatePhoneNumber']}">
+									<f:validateRegex pattern="^([0-9-\+]+)$" />
+								</p:inputText>
+
+								<p:outputLabel for="email" value="#{msg['profile.email']}" />
+								<p:inputText id="email"
+									validatorMessage="#{msg['homepage.validateEmail']}"
+									value="#{profileBean.email}" required="true"
+									requiredMessage="#{msg['homepage.requiredEmail']}" maxlength="45"
+									styleClass="placeholder">
+
+									<f:validateRegex
+										pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+
+									<f:ajax event="change" render="submitButton"/>
+									
+								</p:inputText>
+
+								<p:outputLabel for="city" value="#{msg['profile.city']}" />
+								<p:selectOneMenu id="city" required="true"
+									value="#{profileBean.user.agenciesId}" styleClass="dropmenu"
+									requiredMessage="#{msg['homepage.requiredCity']} ">
+
+									<f:selectItems value="#{profileBean.agencies}" var="agency"
+										itemValue="#{agency.id}" itemLabel="#{agency.city}" />
+								</p:selectOneMenu>
+
+							</h:panelGrid>
+							<p:commandButton value="#{msg['profile.save']}" action="#{profileBean.save}" 
+								styleClass="savebtn customBtn" update="grid" id="submitButton" />
+						</h:form>
+					</p:outputPanel>
+				</p:outputPanel>
+			</p:outputPanel>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

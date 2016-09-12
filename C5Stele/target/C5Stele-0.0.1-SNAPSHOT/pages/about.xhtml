@@ -1,0 +1,39 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+	<ui:composition template="template.xhtml">
+
+		<ui:define name="header">
+			<ui:param name="pageParam" value="about" />
+			<ui:include src="header.xhtml" />
+		</ui:define>
+
+		<ui:define name="content" styleClass="content">
+
+			<h:outputStylesheet name="css/bootstrap.min.css" />
+			<h:outputStylesheet name="css/about.css" />
+
+			<h:form styleClass="outer row" id="aboutUsText">
+				<p:growl id="msgs" showDetail="true" />
+				<p:outputPanel layout="block" styleClass="col-lg-8 col-lg-offset-2">
+				<ui:repeat var="listTabs" value="#{aboutBean.data}"
+					varStatus="status">
+
+					<p:fieldset toggleable="true" toggleSpeed="500"
+						legend="#{listTabs.name}" styleClass="tab">
+						<h:panelGrid columns="2" cellpadding="5">
+							<h:outputText value="#{listTabs.text}" escape="false" />
+						</h:panelGrid>
+					</p:fieldset>
+				</ui:repeat>
+				</p:outputPanel>
+			</h:form>
+
+		</ui:define>
+
+	</ui:composition>
+</h:body>
+</html>

@@ -1,0 +1,150 @@
+@CHARSET "ISO-8859-1";
+
+.basic {
+	margin: auto;
+	width: 90%;
+}
+
+.picture {
+	display: block;
+	margin: auto;
+	width: 300px;
+	margin-bottom: 10px;
+}
+
+.savebtn {
+	display: block;
+	margin: auto;
+	width: 25%;
+	margin-bottom: 50px;
+}
+
+.leftPanel {
+	margin-top:30px;
+}
+
+.rightPanel {
+	border-left: 1px solid #666;
+	color: #000;
+	font-weight: normal;
+	padding: 10px 0 0 30px;
+	font-family: Tahoma sans-serif;
+}
+
+.dropmenu {
+	width:125px;
+}
+
+.picForm {
+	width: 90%;
+	margin: auto;
+}
+
+.grid {
+	margin-top:20px;
+	margin-bottom:10px;
+	margin-right: 12px;
+	width: 100%;
+}
+
+.ui-outputlabel-rfi {
+	display: none;
+}
+
+.ui-widget.ui-state-default.ui-inputfield, .dropmenu .ui-selectonemenu-label.ui-inputfield.ui-corner-all  {
+	font-weight: normal;
+	box-shadow: none;
+	border:none;
+	border-bottom:1px solid #666;
+	border-radius:0;
+	background: none;
+	padding-left:15px;
+}
+
+.ui-state-default.dropmenu, .ui-widget-content .ui-state-default.dropmenu, .ui-widget-header .ui-state-default.dropmenu {
+	background: transparent;
+	border:none;
+}
+
+.ui-inputfield.dropmenu, .ui-widget-content .ui-inputfield.dropmenu, .ui-widget-header .ui-inputfield.dropmenu, .dropmenu .ui-state-default {
+	background: transparent;
+}
+
+.ui-selectonemenu .ui-selectonemenu-trigger {
+	border-left: none;
+}
+
+.ui-state-hover {
+	box-shadow:none;
+}
+
+.ui-state-default {
+	box-shadow: none;
+	webkit-box-shadow: none;
+}
+
+.ui-widget.placeholder, .ui-selectonemenu-label.ui-inputfield.ui-corner-all {
+	font-size: 14px;
+	font-family: Tahoma sans-serif;
+	
+}
+
+.ui-widget.placeholder, .dropmenu {
+	width: 90%;
+}
+
+td:first-child {
+	width:25%;
+}
+
+.ui-fileupload-files td {
+	width: 22%;
+}
+
+.ui-fileupload-content .ui-progressbar {
+	width: 100%;
+}
+
+.ui-fileupload-buttonbar.ui-widget-header.ui-corner-top {
+	background: #F5F5F5;
+}
+
+.ui-button.ui-state-default, .ui-widget-content .ui-state-default.ui-button, .ui-widget-header .ui-state-default.ui-button {
+	background: #fff;
+	padding: 3px;
+	margin-top: 2px;
+	margin-bot: 2px;
+	border-radius:0;
+	color:#666;
+	font-size:14px;
+	font-weight:normal;
+	border:1px solid #666;
+}
+
+.ui-fileupload-buttonbar {
+	background: none;
+	border: none;
+}
+
+.ui-fileupload-content {
+	border: none;
+}
+
+@media only screen and (max-height : 899px) {
+	.savebtn {
+		margin-bottom:100px;
+	}
+	.picForm {
+		width: 100%;
+	}
+}
+
+@media only screen and (max-width : 600px) {
+	.picture {
+		width: 200px;
+	}
+	
+	.picForm {
+		width: 100%;
+	}
+}

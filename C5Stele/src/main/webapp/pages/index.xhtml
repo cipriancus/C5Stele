@@ -1,0 +1,205 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+	<ui:composition template="template.xhtml">
+
+		<ui:define name="header">
+			<ui:param name="pageParam" value="home" />
+			<ui:include src="header.xhtml" />
+		</ui:define>
+
+		<ui:define name="content" styleClass="content">
+			<h:outputStylesheet name="css/index.css" />
+			<p:outputPanel styleClass="row mainWrapper">
+
+				<p:outputPanel styleClass="col-md-6 col-md-push-6 rightPanel">
+
+					<p:outputPanel layout="block" styleClass="row userpassword"
+						rendered="#{!userMB.loggedIn}">
+						<h:form prependId="false" >
+							<p:outputPanel layout="block" styleClass="alignText">
+								<h:outputText styleClass="accText"
+									value="#{msg['homepage.signInTitle']}" />
+							</p:outputPanel>
+							<p:outputPanel styleClass="col-xs-12 loginLeft">
+								<p:inputText value="#{loginBean.username}" id="username2" tabindex="1"
+									placeholder="#{msg['template.username']}" required="true"
+									styleClass=" user inputLoginHeader"
+									requiredMessage="#{msg['template.requiredUser']}" />
+								<p:link styleClass="links" value="#{msg['template.forgotPass']}"
+									outcome="forgot.xhtml" />
+							</p:outputPanel>
+
+							<p:outputPanel styleClass="col-xs-12 loginMiddle">
+								<p:password value="#{loginBean.password}" id="password2" tabindex="2"
+									placeholder="#{msg['template.password']}" required="true"
+									styleClass=" pass inputLoginHeader"
+									requiredMessage="#{msg['template.requiredPass']}"
+									maxlength="45" />
+								<p:link styleClass="links"
+									value="#{msg['template.resendActivation']}"
+									outcome="reactivate.xhtml" />
+							</p:outputPanel>
+
+							<p:outputPanel styleClass="col-xs-12 loginRight">
+								<h:commandButton value="#{msg['template.logIn']}"
+									action="#{loginBean.login}"
+									styleClass="customBtn btnSub inputLoginHeader"
+									update="growlmsg2" />
+							</p:outputPanel>
+
+						</h:form>
+					</p:outputPanel>
+
+
+					<h:form id="registerForm" styleClass="registerForm" enctype="multipart/form-data">
+						<p:outputPanel layout="block" styleClass="alignText">
+							<h:outputText styleClass="accText"
+								value="#{msg['homepage.registerTitle']}" />
+						</p:outputPanel>
+						
+						<p:inputText value="#{registrationBean.user.firstName}"
+							styleClass="inputTextField"
+							placeholder="#{msg['homepage.firstName']}" required="true"
+							requiredMessage="#{msg['homepage.requiredFirstName']}"
+							maxlength="255"
+							validatorMessage="#{msg['homepage.validateFirstName']}">
+							<f:validateRegex pattern="^[a-zA-ZäöüßÄÖÜ\-]+$" />
+						</p:inputText>
+
+						<p:inputText value="#{registrationBean.user.lastName}"
+							styleClass="inputTextField"
+							placeholder="#{msg['homepage.lastName']}" required="true"
+							requiredMessage="#{msg['homepage.requiredLastName']}"
+							label="Lastname" maxlength="255"
+							validatorMessage="#{msg['homepage.validateLastName']}">
+							<f:validateRegex pattern="^[a-zA-ZäöüßÄÖÜ\-]+$" />
+						</p:inputText>
+
+						<p:selectOneMenu id="title" required="true"
+							value="#{registrationBean.user.title}"
+							styleClass="selectOneMenuInput"
+							requiredMessage="#{msg['homepage.requiredTitle']} ">
+							<f:selectItem itemLabel="#{msg['homepage.selectTitle']}"
+								itemValue="" />
+							<f:selectItem itemLabel="Mr" itemValue="Mr" />
+							<f:selectItem itemLabel="Ms" itemValue="Ms" />
+							<f:selectItem itemLabel="Mrs" itemValue="Mrs" />
+						</p:selectOneMenu>
+
+						<p:inputText id="phoneNumber" styleClass="inputTextField"
+							placeholder="#{msg['homepage.phoneNumber']}"
+							value="#{registrationBean.user.phoneNumber}" maxlength="45"
+							validatorMessage="#{msg['homepage.validatePhoneNumber']}">
+							<f:validateRegex pattern="^([0-9-\+]+)$" />
+						</p:inputText>
+
+					    <p:messages id="myMessage" globalOnly="true" showDetail="true" severity="error"/>
+						
+						<p:inputText id="email"
+							validatorMessage="#{msg['homepage.validateEmail']}"
+							styleClass="inputTextField"
+							placeholder="#{msg['homepage.email']}"
+							value="#{registrationBean.email}" required="true"
+							requiredMessage="#{msg['homepage.requiredEmail']}" maxlength="45">
+							<f:validateRegex
+								pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+							<f:ajax event="change" render="myMessage submitButton"/>
+
+						</p:inputText>
+
+					    <p:messages id="usernameMessage" globalOnly="true" showDetail="true" severity="error"/>
+
+						<p:inputText value="#{registrationBean.username}"
+							styleClass="inputTextField"
+							placeholder="#{msg['homepage.username']}" required="true"
+							requiredMessage="#{msg['homepage.requiredUsername']}"
+							label="Username" maxlength="45" >
+													
+						<f:ajax event="change" render="usernameMessage submitButton"/>
+							
+							</p:inputText>
+
+						<p:outputPanel>
+							<p:password id="pwd1" value="#{registrationBean.user.password}"
+								styleClass="inputTextField" match="pwd2" label="Password"
+								required="true" placeholder="#{msg['homepage.password']}"
+								validatorMessage="#{msg['homepage.validatePassword']}"
+								requiredMessage="#{msg['homepage.requiredPassword']}"
+								feedback="true" maxlength="45" />
+							<p:password id="pwd2" value="#{registrationBean.user.password}"
+								styleClass="inputTextField" label="Password 2"
+								placeholder="#{msg['homepage.repeatPassword']}" />
+						</p:outputPanel>
+
+
+
+						<p:selectOneMenu id="city" required="true"
+							value="#{registrationBean.user.agenciesId}"
+							styleClass="selectOneMenuInput"
+							requiredMessage="#{msg['homepage.requiredCity']} ">
+							<f:selectItem itemLabel="#{msg['homepage.selectCity']}"
+								itemValue="" />
+							<f:selectItems value="#{registrationBean.agencies}" var="agency"
+								itemValue="#{agency.id}" itemLabel="#{agency.city}" />
+						</p:selectOneMenu>
+
+						<p:selectOneMenu id="position" required="true"
+							styleClass="selectOneMenuInput"
+							value="#{registrationBean.user.positionsId}"
+							requiredMessage="#{msg['homepage.requiredPosition']} ">
+
+							<f:selectItem itemLabel="#{msg['homepage.selectPosition']}"
+								itemValue="" />
+							<f:selectItems value="#{registrationBean.positions}"
+								var="position" itemValue="#{position.id}"
+								itemLabel="#{position.code}" />
+						</p:selectOneMenu>
+
+						<label class="uploadArea"> <p:fileUpload id="uploadArea"
+								value="#{fileUploadManagedBean.file}" immediate="true"
+								mode="simple" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+								sizeLimit="2000000"
+								invalidSizeMessage="#{msg['homepage.invalidFileSize']}"
+								invalidFileMessage="#{msg['homepage.invalidFileType']}" /> <span>File...</span>
+						</label>
+						<p:outputPanel id="submitButton" styleClass="alignText">
+							<p:commandButton value="#{msg['homepage.submit']}" rendered="#{registrationBean.valid}"
+								action="#{registrationBean.save()}" styleClass="customBtn"
+								ajax="false" />
+						</p:outputPanel>
+					</h:form>
+				</p:outputPanel>
+				<p:outputPanel styleClass="col-md-6 col-md-pull-6 starPanel">
+					<h:graphicImage styleClass="star" name="images/golden_star.png" />
+				</p:outputPanel>
+			</p:outputPanel>
+
+			<script type="text/javascript">
+				function changePath() {
+					var input = document.querySelector('input[type="file"]');
+					var label = input.nextElementSibling;
+					var value = input.value;
+					if (value != null) {
+						value = value.split("\\");
+						label.innerHTML = value[value.length - 1];
+					} else {
+						label.innerHTML = "File...";
+					}
+				}
+
+				var onFileChange = function onFileChange() {
+					var input = document.querySelector('input[type="file"]');
+					input.addEventListener('change', changePath, false);
+				};
+
+				onFileChange();
+			</script>
+		</ui:define>
+
+	</ui:composition>
+</h:body>
+</html>

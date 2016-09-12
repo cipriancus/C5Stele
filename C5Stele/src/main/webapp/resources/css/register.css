@@ -1,0 +1,123 @@
+* {
+	font-family: "Courier New", Courier, monospace;
+}
+
+.text {
+	color: black;
+	float: left;
+	width: 15%;
+	margin-right: 10%;
+}
+
+.outer {
+	display: table;
+	position: absolute;
+	height: 100%;
+	width: 100%;
+}
+
+.middle {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.basic {
+	margin: auto;
+	width: 30%;
+}
+
+.inputText {
+	width: 90%;
+	background-position: 7px 7px;
+	background-repeat: no-repeat;
+}
+
+.btnSubmit {
+	font-size: inherit;
+}
+
+.ui-wizard.ui-widget {
+	margin: auto;
+}
+
+.dummy {
+	text-align: center;
+}
+
+#registrationForm ul>li {
+	font-size: inherit;
+}
+
+@media only screen and (max-width : 980px) {
+	.basic {
+		width: 75%;
+		height: 60%;
+	}
+	#registrationForm ul>li {
+		padding: 3px;
+		width: 100%;
+		font-size: inherit;
+	}
+	.ui-widget.ui-widget {
+		font-size: 1em;
+	}
+	.textConfirm {
+		padding: 10px;
+		display: block;
+	}
+	.previewImage {
+		width: 50%;
+		padding: 10px;
+	}
+}
+
+@media only screen and (max-width : 480px) {
+	.basic {
+		width: 80%;
+		height: 70%;
+		margin-top: 5%;
+	}
+	#registrationForm ul>li {
+		padding: 3px;
+	}
+	.ui-widget.ui-widget {
+		font-size: 0.9em;
+	}
+	.textConfirm {
+		padding: 10px;
+		display: block;
+	}
+	.previewImage {
+		width: 50%;
+		padding: 10px;
+	}
+}
+
+@media only screen and (max-width : 320px) {
+	.basic {
+		width: 95%;
+		height: 80%;
+	}
+	#registrationForm ul>li {
+		width: 100%;
+		padding: 7px;
+	}
+	.textConfirm {
+		padding: 10px;
+		display: block;
+	}
+	.previewImage {
+		width: 50%;
+		padding: 10px;
+	}
+}
+
+.textConfirm {
+	padding: 10px;
+	display: block;
+}
+
+.previewImage {
+	padding: 10px;
+	width: 50%;
+}

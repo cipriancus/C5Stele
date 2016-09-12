@@ -1,0 +1,291 @@
+input{
+	border-radius: 0px !important;
+	box-shadow: none !important;
+}
+
+.mainWrapper{
+	
+}
+
+.leftPanel{
+	
+}
+
+.rightPanel{
+	background: none;
+	margin-left: 5%;
+	margin-right: 10%;
+	margin-top: 2%;
+	width:65%;
+	height: 50%;
+}
+
+.pagesFormMenu{
+	width:150px;	
+}
+
+.entity-container {
+	border-radius: 0;
+}
+
+.entity-container > div:first-child {
+	background: none;
+	border: none;
+	border-radius: 0;
+	border-bottom: 1px solid #666;
+}
+
+
+.entity-container-header > div:first-child {
+	text-align: left;
+	
+}
+
+.entity-container-header > div:first-child::after {
+	clear: both;
+	content: "";
+	display: block;
+	line-height: 40px;
+}
+
+
+.button {
+	display: inline-block;
+	float: right;
+}
+
+.ui-accordion .ui-widget-content {
+	background: none;
+}
+
+.ui-accordion .ui-state-default {
+	box-shadow: none;
+	webkit-box-shadow: none;
+}
+
+.ui-accordion .ui-accordion-header {
+	padding-left: .5em;
+}
+
+.ui-accordion .ui-accordion-header .ui-icon {
+	left: auto;
+	right: .5em;
+}
+
+.ui-accordion .ui-state-default, .ui-accordion-content.ui-widget-content .ui-state-default, .ui-accordion-header .ui-state-default {
+	font-weight: normal;
+	box-shadow: none;
+	border:none;
+	border-bottom:1px solid #666;
+	border-radius:0;
+	background: none;
+}
+
+
+.ui-steps .ui-steps-item {
+    width: 24%;
+}
+ 
+.ui-state-highlight {
+    text-shadow: none !important;
+}
+ 
+.ui-steps.custom {
+    margin-bottom: 30px;
+    margin-top:20px;
+    margin-left:20%;
+    color:black;
+}
+ 
+.ui-steps.custom .ui-steps-item .ui-menuitem-link {
+    height: 10px;
+    padding: 0 1em;
+}
+ 
+.ui-steps.custom .ui-steps-item .ui-steps-number {
+    background-color: #0081c2;
+    color: #FFFFFF;
+    display: inline-block;
+    width: 30px;
+    border-radius: 10px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
+
+.aboutEdit{
+	margin:50px;	
+}
+
+.aboutTabs{
+	margin-bottom: 50px;
+}
+
+.inputText{
+	margin:10px;
+}
+
+.labelInLine{
+	float: left;
+    padding-top: 17px;
+    padding-right: 11px;
+}
+
+.selectCountry{
+	margin-left: 10px; 	
+}
+
+@media only screen and (max-width : 1199px) {
+	.userCarousel {
+		margin-bottom: 50px;
+	}
+}
+
+.ui-datatable-header.ui-widget-header, .ui-widget-header.ui-corner-bottom {
+	background: #c1d2f0;
+}
+
+.ui-paginator, .ui-paginator-top, .ui-widget-header{
+	background: #c1d2f0;
+}
+
+.ui-paginator-next, .ui-state-default{
+	background: #c1d2f0;
+}
+
+.ui-state-default {
+	background: #c1d2f0;
+}
+
+.ui-menu li {
+	background: none;
+	border: none;
+}
+
+.ui-menu {
+	background: none;
+	border: none;
+}
+
+.ui-menu .ui-widget-header {
+	border-bottom: 1px solid;
+	border-radius: 0px;
+}
+
+.ui-datagrid-header {
+	background: #c1d2f0;
+}
+
+#j_idt234_paginator_top {
+	border-left: solid 1px;
+	border-right: solid 1px;
+}
+
+.ui-paginator .ui-state-default, .ui-paginator.ui-widget-header .ui-state-default {
+	background: white;
+}
+
+.ui-paginator .ui-state-active, .ui-paginator.ui-widget-header .ui-state-active {
+	background: #ADD8E6;
+}
+
+.ui-widget-header.ui-corner-bottom {
+	background: white;
+}
+
+.ui-dialog-titlebar.ui-widget-header {
+	background: #c1d2f0;
+}
+
+.ui-dialog-content.ui-widget-content {
+	background: white;
+}
+
+.ui-fileupload-content.ui-widget-content.ui-corner-bottom {
+	border: none;
+}
+
+.ui-button.ui-state-default, .ui-widget-content .ui-state-default.ui-button, .ui-widget-header .ui-state-default.ui-button {
+	background: #fff;
+	padding: 3px;
+	margin:5px;
+	border-radius:0;
+	color:#666;
+	font-size:14px;
+	font-weight:normal;
+	border:1px solid #666;
+}
+
+.rightPanelInner {
+	background: none;
+	margin-bottom:100px;
+}
+
+.ui-menuitem-link:hover, .ui-menuitem-link:focus {
+	background: none;
+	border-bottom: 1px solid;
+	border-radius: 0px;
+	box-shadow: none;
+	
+}
+
+.ui-fileupload-buttonbar {
+	background: none;
+	border: none;
+}
+
+.ui-slider-horizontal {
+	background: white;
+}
+
+.ui-slider-range {
+	background: #c1d2f0;
+}
+
+.subMenuTitle {
+	border-bottom: solid 2px;
+}
+
+.picture {
+	display: block;
+	margin: auto;
+	width: 300px;
+	margin-bottom: 10px;
+}
+
+.periodsForm:country {
+	background: white;
+}
+
+.secondTable {
+	padding-right: 3em;
+}
+
+.listOfTeams {
+	width: 45em;
+}
+
+.listOfProjects {
+	width: 45em;
+}
+
+.modal-dialog {
+    overflow-y: initial !important;
+    margin: auto;
+}
+.modal-body {
+    height: 30em;
+    overflow-y: auto;
+}
+
+.modal-body-projects {
+	height: 16em;
+}
+
+.modal-dialog-projects {
+	
+}
+
+.table.ui-panelgrid>*>tr,
+.table.ui-panelgrid .ui-panelgrid-cell {
+    border: none;
+}
